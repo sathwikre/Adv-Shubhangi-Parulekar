@@ -22,8 +22,8 @@
   
   body {
     @apply bg-brandIvory text-brandCharcoal font-sans antialiased selection:bg-brandWine selection:text-white;
-    font-size: 17px;
-    line-height: 1.68;
+    font-size: 18px;
+    line-height: 1.6;
     -webkit-tap-highlight-color: transparent;
     overflow-x: hidden;
   }
@@ -67,5 +67,12 @@
   
   .portrait-desktop {
     width: clamp(220px, 20vw, 320px) !important;
+  }
+}
+
+/* Mobile typography adjustments */
+@media (max-width: 767px) {
+  body {
+    font-size: 16px;
   }
 }
