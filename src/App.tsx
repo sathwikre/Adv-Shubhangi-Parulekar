@@ -107,7 +107,7 @@ export default function App() {
               <div className="flex-shrink-0 text-center">
                 <div className="relative inline-block portrait-frame p-1 rounded bg-white">
                   <img 
-                    src="/assets/aistudio/Image 2.png" 
+                    src="/portrait.png" 
                     alt="Advocate Shubhangi Prasad Parulekar portrait" 
                     className="w-40 h-40 sm:w-44 sm:h-44 object-cover rounded" 
                     loading="eager"
