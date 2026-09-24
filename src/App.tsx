@@ -43,7 +43,7 @@ export default function App() {
     <div className="min-h-screen flex flex-col">
       {/* Header */}
       <header className="sticky top-0 z-40 bg-brandIvory/95 backdrop-blur-md border-b border-brandBorder" id="top-navbar">
-        <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div className="mx-auto px-4 flex items-center justify-between" style={{minHeight: '64px', maxHeight: '76px'}}>
           <a href="#hero" className="group block focus:outline-none" aria-label="Go to top">
             <span className="block font-cinzel text-xs tracking-wider uppercase font-semibold text-brandWine group-hover:text-brandWineHover transition-colors">
               Adv. Shubhangi Prasad Parulekar
@@ -53,23 +53,39 @@ export default function App() {
             </span>
           </a>
 
-          <div className="flex items-center gap-2">
-            <a href="tel:8308825029" className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-brandWine text-white text-xs font-semibold tracking-wide hover:bg-brandWineHover transition-colors">
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center gap-6">
+            <a onClick={() => setIsMenuOpen(false)} className="text-sm text-brandCharcoal hover:text-brandWine transition-colors" href="#hero">Home</a>
+            <a onClick={() => setIsMenuOpen(false)} className="text-sm text-brandCharcoal hover:text-brandWine transition-colors" href="#experience">Background</a>
+            <a onClick={() => setIsMenuOpen(false)} className="text-sm text-brandCharcoal hover:text-brandWine transition-colors" href="#practice-areas">Practice</a>
+            <a onClick={() => setIsMenuOpen(false)} className="text-sm text-brandCharcoal hover:text-brandWine transition-colors" href="#case-outcomes">Cases</a>
+            <a onClick={() => setIsMenuOpen(false)} className="text-sm text-brandCharcoal hover:text-brandWine transition-colors" href="#public-lectures">Media</a>
+            <a onClick={() => setIsMenuOpen(false)} className="text-sm text-brandCharcoal hover:text-brandWine transition-colors" href="#contact">Contact</a>
+            <a href="tel:8308825029" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-brandWine text-white text-xs font-semibold tracking-wide hover:bg-brandWineHover transition-colors">
               <Phone size={14} />
               <span>Call Chamber</span>
+            </a>
+          </nav>
+
+          {/* Mobile Menu Toggle */}
+          <div className="flex lg:hidden items-center gap-2">
+            <a href="tel:8308825029" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-brandWine text-white text-xs font-semibold tracking-wide hover:bg-brandWineHover transition-colors">
+              <Phone size={14} />
+              <span>Call</span>
             </a>
             <button 
               onClick={toggleMenu}
               className="p-2 rounded border border-brandBorder text-brandCharcoal hover:bg-white transition-colors"
               aria-label="Toggle navigation menu"
+              aria-expanded={isMenuOpen}
             >
               {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Nav */}
-        <nav className={`${isMenuOpen ? 'block' : 'hidden'} border-t border-brandBorder bg-white px-4 py-4 shadow-lg transition-all`}>
+        {/* Mobile Nav - Hidden by default */}
+        <nav className={`${isMenuOpen ? 'block' : 'hidden'} lg:hidden border-t border-brandBorder bg-white px-4 py-4 shadow-lg transition-all`}>
           <ul className="flex flex-col space-y-3 font-medium text-base">
             <li><a onClick={() => setIsMenuOpen(false)} className="nav-link" href="#hero">Home</a></li>
             <li><a onClick={() => setIsMenuOpen(false)} className="nav-link" href="#experience">Professional Background</a></li>
@@ -89,84 +105,84 @@ export default function App() {
 
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="relative pt-6 pb-10 px-4 max-w-4xl mx-auto" id="hero">
-          <div className="text-center sm:text-left">
-            <span className="inline-block text-xs uppercase tracking-widest font-semibold text-brandWine bg-brandWine/10 px-3 py-1 rounded-sm mb-3">
-              Criminal Defence Advocate · Maharashtra
-            </span>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-brandCharcoal leading-tight mb-2">
-              Adv. Shubhangi Prasad Parulekar
-            </h1>
-            <p className="font-cinzel text-xs tracking-wider text-brandGold font-semibold uppercase mb-5">
-              District & Sessions Courts & Bombay High Court Appellate Side
-            </p>
-          </div>
-
-          <div className="mt-4 bg-brandCard border border-brandBorder rounded-lg p-5 sm:p-6 shadow-sm">
-            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
-              <div className="flex-shrink-0 text-center">
-                <div className="relative inline-block portrait-frame p-1 rounded bg-white">
-                  <img 
-                    src="/portrait.png" 
-                    alt="Advocate Shubhangi Prasad Parulekar portrait" 
-                    className="w-40 h-40 sm:w-44 sm:h-44 object-cover rounded" 
-                    loading="eager"
-                  />
-                  <div className="mt-2 text-[11px] uppercase tracking-wider font-semibold text-brandWine bg-brandIvory py-0.5 px-2 border border-brandBorder rounded">
-                    Practising Since 2008
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex-1 text-center sm:text-left">
-                <p className="text-lg leading-relaxed text-brandCharcoal font-serif italic mb-3">
-                  "Result-driven Criminal Lawyer with 14+ years of proven court experience in trial defence and appellate-side jurisdiction."
-                </p>
-                <p className="text-sm sm:text-base text-brandMuted leading-relaxed mb-5">
-                  Conducting defence across District & Sessions Courts in Pune, Khed, and Baramati, alongside extensive criminal appeals before the Bombay High Court Appellate Side. Extensive panel representation in institutional legal aid and central prison defense.
+        <section className="relative px-4 mx-auto" style={{minHeight: 'calc(100svh - 76px)', maxWidth: 'min(92vw, 1400px)'}} id="hero">
+          <div className="flex flex-col justify-center min-h-full py-6 md:py-8">
+            <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.25fr)_minmax(280px,0.75fr)] gap-6 md:gap-8 items-center">
+              {/* Left Content */}
+              <div className="order-2 lg:order-1">
+                <span className="inline-block text-xs uppercase tracking-widest font-semibold text-brandWine bg-brandWine/10 px-3 py-1 rounded-sm mb-3">
+                  Criminal Defence Advocate · Maharashtra
+                </span>
+                <h1 className="font-serif font-bold text-brandCharcoal leading-tight mb-2" style={{fontSize: 'clamp(42px, 4.5vw, 76px)'}}>
+                  Adv. Shubhangi Prasad Parulekar
+                </h1>
+                <p className="font-cinzel text-brandGold font-semibold uppercase mb-4" style={{fontSize: 'clamp(13px, 1.1vw, 18px)'}}>
+                  District & Sessions Courts & Bombay High Court Appellate Side
                 </p>
                 
-                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3">
-                  <a href="#contact" className="inline-flex items-center justify-center px-4 py-2.5 bg-brandWine hover:bg-brandWineHover text-white text-sm font-semibold rounded shadow-sm transition-colors">
+                <p className="text-brandCharcoal font-serif italic mb-4" style={{fontSize: 'clamp(16px, 1.25vw, 20px)', lineHeight: '1.6', maxWidth: '720px'}}>
+                  "Result-driven Criminal Lawyer with 14+ years of proven court experience in trial defence and appellate-side jurisdiction."
+                </p>
+                <p className="text-brandMuted mb-5" style={{fontSize: 'clamp(14px, 1.1vw, 17px)', lineHeight: '1.65', maxWidth: '720px'}}>
+                  Conducting defence across District & Sessions Courts in Pune, Khed, and Baramati, alongside extensive criminal appeals before the Bombay High Court Appellate Side.
+                </p>
+                
+                <div className="flex flex-wrap items-center gap-3 mb-6">
+                  <a href="#contact" className="inline-flex items-center justify-center px-5 py-3 bg-brandWine hover:bg-brandWineHover text-white text-sm font-semibold rounded shadow-sm transition-colors" style={{minHeight: '48px'}}>
                     Schedule Consultation
                   </a>
-                  <a href="tel:8308825029" className="inline-flex items-center justify-center px-4 py-2.5 bg-white border border-brandBorder text-brandCharcoal hover:bg-brandIvory text-sm font-semibold rounded transition-colors">
+                  <a href="tel:8308825029" className="inline-flex items-center justify-center px-5 py-3 bg-white border border-brandBorder text-brandCharcoal hover:bg-brandIvory text-sm font-semibold rounded transition-colors" style={{minHeight: '48px'}}>
                     <Phone size={16} className="mr-1.5 text-brandWine" />
                     Call: 8308825029
                   </a>
-                  <a href="#case-outcomes" className="inline-flex items-center text-xs font-semibold text-brandWine hover:underline underline-offset-4 py-2">
+                  <a href="#case-outcomes" className="inline-flex items-center text-sm font-semibold text-brandWine hover:underline underline-offset-4 py-3">
                     <span>View Acquittals</span>
                     <span className="ml-1">↓</span>
                   </a>
                 </div>
-              </div>
-            </div>
 
-            <div className="gold-rule my-5"></div>
+                {/* Statistics */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs font-medium text-brandCharcoal">
+                  <div className="bg-brandIvory p-2 rounded border border-brandBorder/60">
+                    <span className="block text-brandWine font-bold">14+ Years</span>
+                    Trial Experience
+                  </div>
+                  <div className="bg-brandIvory p-2 rounded border border-brandBorder/60">
+                    <span className="block text-brandWine font-bold">Appellate Side</span>
+                    Bombay High Court
+                  </div>
+                  <div className="bg-brandIvory p-2 rounded border border-brandBorder/60">
+                    <span className="block text-brandWine font-bold">Sessions Courts</span>
+                    Pune, Khed, Baramati
+                  </div>
+                  <div className="bg-brandIvory p-2 rounded border border-brandBorder/60">
+                    <span className="block text-brandWine font-bold">Legal Aid</span>
+                    High Court & Prison Panel
+                  </div>
+                </div>
+              </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs font-medium text-brandCharcoal pt-1">
-              <div className="bg-brandIvory p-2 rounded border border-brandBorder/60">
-                <span className="block text-brandWine font-bold">14+ Years</span>
-                Trial Experience
-              </div>
-              <div className="bg-brandIvory p-2 rounded border border-brandBorder/60">
-                <span className="block text-brandWine font-bold">Appellate Side</span>
-                Bombay High Court
-              </div>
-              <div className="bg-brandIvory p-2 rounded border border-brandBorder/60">
-                <span className="block text-brandWine font-bold">Sessions Courts</span>
-                Pune, Khed, Baramati
-              </div>
-              <div className="bg-brandIvory p-2 rounded border border-brandBorder/60">
-                <span className="block text-brandWine font-bold">Legal Aid</span>
-                High Court & Prison Panel
+              {/* Right - Portrait */}
+              <div className="order-1 lg:order-2 flex justify-center">
+                <div className="relative inline-block portrait-frame p-1 rounded bg-white">
+                  <img 
+                    src="/portrait.png" 
+                    alt="Advocate Shubhangi Prasad Parulekar portrait" 
+                    className="rounded object-cover lg:portrait-desktop"
+                    style={{width: 'clamp(240px, 75vw, 300px)', height: 'auto'}}
+                    loading="eager"
+                  />
+                  <div className="mt-2 text-[11px] uppercase tracking-wider font-semibold text-brandWine bg-brandIvory py-0.5 px-2 border border-brandBorder rounded text-center">
+                    Practising Since 2008
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
         {/* Experience Section */}
-        <section className="py-10 px-4 max-w-4xl mx-auto border-t border-brandBorder" id="experience">
+        <section className="py-10 px-4 mx-auto border-t border-brandBorder" style={{maxWidth: 'min(92vw, 1400px)'}} id="experience">
           <div className="mb-6">
             <span className="text-xs uppercase tracking-widest font-semibold text-brandGold block mb-1">Professional Record</span>
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-brandCharcoal">Experience Built in Criminal Defence</h2>
@@ -232,7 +248,7 @@ export default function App() {
         </section>
 
         {/* Practice Areas */}
-        <section className="py-10 px-4 max-w-4xl mx-auto border-t border-brandBorder" id="practice-areas">
+        <section className="py-10 px-4 mx-auto border-t border-brandBorder" style={{maxWidth: 'min(92vw, 1400px)'}} id="practice-areas">
           <div className="mb-6">
             <span className="text-xs uppercase tracking-widest font-semibold text-brandGold block mb-1">Focus Areas</span>
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-brandCharcoal">Criminal Practice Areas</h2>
@@ -262,11 +278,11 @@ export default function App() {
         </section>
 
         {/* Case Outcomes */}
-        <section className="py-10 px-4 max-w-4xl mx-auto border-t border-brandBorder" id="case-outcomes">
+        <section className="py-10 px-4 mx-auto border-t border-brandBorder" style={{maxWidth: 'min(92vw, 1400px)'}} id="case-outcomes">
           <div className="mb-4">
             <span className="text-xs uppercase tracking-widest font-semibold text-brandGold block mb-1">Factual Court Records</span>
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-brandCharcoal">Selected Criminal Cases Resulting in Acquittal</h2>
-            <p class="text-sm text-brandMuted mt-1">Verified matters from trial records conducted by Adv. Shubhangi Prasad Parulekar.</p>
+            <p className="text-sm text-brandMuted mt-1">Verified matters from trial records conducted by Adv. Shubhangi Prasad Parulekar.</p>
           </div>
 
           <div className="bg-brandWine/5 border-l-4 border-brandWine p-3.5 rounded-r text-xs text-brandCharcoal mb-5">
@@ -337,7 +353,7 @@ export default function App() {
         </section>
 
         {/* Media Section */}
-        <section className="py-10 px-4 max-w-4xl mx-auto border-t border-brandBorder" id="public-lectures">
+        <section className="py-10 px-4 mx-auto border-t border-brandBorder" style={{maxWidth: 'min(92vw, 1400px)'}} id="public-lectures">
           <div className="mb-5">
             <span className="text-xs uppercase tracking-widest font-semibold text-brandGold block mb-1">Public Legal Awareness</span>
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-brandCharcoal">Legal Awareness & Public Lectures</h2>
@@ -364,7 +380,7 @@ export default function App() {
         </section>
 
         {/* Contact Section */}
-        <section className="py-10 px-4 max-w-4xl mx-auto border-t border-brandBorder" id="contact">
+        <section className="py-10 px-4 mx-auto border-t border-brandBorder" style={{maxWidth: 'min(92vw, 1400px)'}} id="contact">
           <div className="mb-6">
             <span className="text-xs uppercase tracking-widest font-semibold text-brandGold block mb-1">Chamber Office</span>
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-brandCharcoal">Discuss Your Legal Matter</h2>
@@ -468,18 +484,31 @@ export default function App() {
         </section>
 
         {/* Disclaimer Section */}
-        <section className="py-8 px-4 max-w-4xl mx-auto border-t border-brandBorder bg-brandIvory" id="disclaimer">
+        <section className="py-8 px-4 mx-auto border-t border-brandBorder bg-brandIvory pb-20 md:pb-8" style={{maxWidth: 'min(92vw, 1400px)'}} id="disclaimer">
           <div className="p-4 bg-white/70 border border-brandBorder rounded-md text-xs text-brandMuted leading-relaxed">
             <h4 className="font-cinzel text-xs uppercase tracking-wider font-bold text-brandWine mb-1.5">Bar Council of India Professional Regulation & Statutory Disclaimer</h4>
-            <p className="mb-2">As per the rules of the Bar Council of India, advocates are prohibited from soliciting work or advertising. By accessing this website (or any linked content), the user acknowledges that the information provided herein is solely for informational purposes at the user’s voluntary request.</p>
+            <p className="mb-2">As per the rules of the Bar Council of India, advocates are prohibited from soliciting work or advertising. By accessing this website (or any linked content), the user acknowledges that the information provided herein is solely for informational purposes at the user's voluntary request.</p>
             <p>No material provided on this profile should be construed as legal advice or solicitation. Transmission, receipt or use of this website does not form or constitute an advocate-client relationship. Prior outcomes, acquittals, or court representations do not guarantee identical results in future proceedings.</p>
           </div>
         </section>
       </main>
 
+      {/* Mobile Bottom Action Bar */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-brandCharcoal border-t border-brandWine z-50" style={{paddingBottom: 'env(safe-area-inset-bottom)'}}>
+        <div className="flex">
+          <a href="tel:8308825029" className="flex-1 flex items-center justify-center py-4 text-white font-semibold text-sm border-r border-white/10 hover:bg-brandWine transition-colors">
+            <Phone size={18} className="mr-2" />
+            CALL
+          </a>
+          <a href="#contact" className="flex-1 flex items-center justify-center py-4 text-white font-semibold text-sm hover:bg-brandWine transition-colors">
+            CONSULT
+          </a>
+        </div>
+      </div>
+
       {/* Footer */}
       <footer className="bg-brandCharcoal text-white pt-8 pb-12 border-t border-brandWine">
-        <div className="max-w-4xl mx-auto px-4">
+        <div className="mx-auto px-4" style={{maxWidth: 'min(92vw, 1400px)'}}>
           <div className="flex flex-col sm:flex-row items-start justify-between gap-6 pb-6 border-b border-white/10 text-xs">
             <div>
               <span className="block font-cinzel text-sm uppercase tracking-wider font-bold text-brandGoldLight">Adv. Shubhangi Prasad Parulekar</span>
