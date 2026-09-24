@@ -45,7 +45,7 @@ export default function App() {
       <header className="sticky top-0 z-40 bg-brandIvory/95 backdrop-blur-md border-b border-brandBorder" id="top-navbar">
         <div className="mx-auto px-4 flex items-center justify-between" style={{minHeight: '64px', maxHeight: '76px'}}>
           <a href="#hero" className="group block focus:outline-none" aria-label="Go to top">
-            <span className="block font-cinzel text-xs tracking-wider uppercase font-semibold text-brandWine group-hover:text-brandWineHover transition-colors">
+            <span className="block font-sans text-xs tracking-wider uppercase font-semibold text-brandWine group-hover:text-brandWineHover transition-colors">
               Adv. Shubhangi Prasad Parulekar
             </span>
             <span className="block text-[11px] tracking-wide text-brandMuted uppercase font-medium mt-0.5">
@@ -116,7 +116,7 @@ export default function App() {
                 <h1 className="font-serif font-bold text-brandCharcoal leading-tight mb-2" style={{fontSize: 'clamp(42px, 4.5vw, 76px)'}}>
                   Adv. Shubhangi Prasad Parulekar
                 </h1>
-                <p className="font-cinzel text-brandGold font-semibold uppercase mb-4" style={{fontSize: 'clamp(13px, 1.1vw, 18px)'}}>
+                <p className="font-sans text-brandGold font-semibold uppercase mb-4" style={{fontSize: 'clamp(13px, 1.1vw, 18px)'}}>
                   District & Sessions Courts & Bombay High Court Appellate Side
                 </p>
                 
@@ -268,7 +268,7 @@ export default function App() {
               { id: "10", title: "Legal Aid & Panel Advocacy", desc: "Institutional representation through Yerawada Prison, State Legal Services, and Amicus assignments." }
             ].map(area => (
               <div key={area.id} className="p-4 bg-white border border-brandBorder rounded-lg shadow-sm hover:border-brandGold transition-colors">
-                <span className="text-xs font-cinzel font-bold text-brandWine">{area.id}</span>
+                <span className="text-xs font-sans font-bold text-brandWine">{area.id}</span>
                 <h3 className="font-serif text-lg font-bold text-brandCharcoal mt-0.5">{area.title}</h3>
                 <p className="text-xs text-brandMuted mt-1 leading-relaxed">{area.desc}</p>
               </div>
@@ -394,7 +394,7 @@ export default function App() {
           <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
             <div className="md:col-span-2 space-y-4">
               <div className="bg-white p-5 border border-brandBorder rounded-lg shadow-sm">
-                <h3 className="font-cinzel text-sm uppercase tracking-wider text-brandWine font-bold mb-3">Chamber Office</h3>
+                <h3 className="font-sans text-sm uppercase tracking-wider text-brandWine font-bold mb-3">Chamber Office</h3>
                 <div className="space-y-3.5 text-sm text-brandCharcoal">
                   <div>
                     <span className="block text-xs uppercase tracking-wider text-brandMuted font-medium">Advocate Name</span>
@@ -486,7 +486,7 @@ export default function App() {
         {/* Disclaimer Section */}
         <section className="py-8 px-4 mx-auto border-t border-brandBorder bg-brandIvory pb-20 md:pb-8" style={{maxWidth: 'min(92vw, 1400px)'}} id="disclaimer">
           <div className="p-4 bg-white/70 border border-brandBorder rounded-md text-xs text-brandMuted leading-relaxed">
-            <h4 className="font-cinzel text-xs uppercase tracking-wider font-bold text-brandWine mb-1.5">Bar Council of India Professional Regulation & Statutory Disclaimer</h4>
+            <h4 className="font-sans text-xs uppercase tracking-wider font-bold text-brandWine mb-1.5">Bar Council of India Professional Regulation & Statutory Disclaimer</h4>
             <p className="mb-2">As per the rules of the Bar Council of India, advocates are prohibited from soliciting work or advertising. By accessing this website (or any linked content), the user acknowledges that the information provided herein is solely for informational purposes at the user's voluntary request.</p>
             <p>No material provided on this profile should be construed as legal advice or solicitation. Transmission, receipt or use of this website does not form or constitute an advocate-client relationship. Prior outcomes, acquittals, or court representations do not guarantee identical results in future proceedings.</p>
           </div>
@@ -511,7 +511,7 @@ export default function App() {
         <div className="mx-auto px-4" style={{maxWidth: 'min(92vw, 1400px)'}}>
           <div className="flex flex-col sm:flex-row items-start justify-between gap-6 pb-6 border-b border-white/10 text-xs">
             <div>
-              <span className="block font-cinzel text-sm uppercase tracking-wider font-bold text-brandGoldLight">Adv. Shubhangi Prasad Parulekar</span>
+              <span className="block font-sans text-sm uppercase tracking-wider font-bold text-brandGoldLight">Adv. Shubhangi Prasad Parulekar</span>
               <span className="block text-white/70 mt-1">Criminal Defence Advocate · Enrolled & Practising Since 2008</span>
               <span className="block text-white/60 mt-0.5">District & Sessions Courts Pune, Khed, Baramati · Bombay High Court</span>
             </div>
