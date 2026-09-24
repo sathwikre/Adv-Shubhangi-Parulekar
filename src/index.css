@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-ivory: #F7F5F0;
-  --color-brand-charcoal: #202020;
-  --color-brand-wine: #6E1F2A;
-  --color-brand-wine-hover: #571720;
-  --color-brand-gold: #B59A62;
-  --color-brand-gold-light: #D6C498;
-  --color-brand-border: #E8E5DF;
-  --color-brand-card: #FFFFFF;
-  --color-brand-muted: #585550;
+  --color-brandIvory: #F7F5F0;
+  --color-brandCharcoal: #202020;
+  --color-brandWine: #6E1F2A;
+  --color-brandWineHover: #571720;
+  --color-brandGold: #B59A62;
+  --color-brandGoldLight: #D6C498;
+  --color-brandBorder: #E8E5DF;
+  --color-brandCard: #FFFFFF;
+  --color-brandMuted: #585550;
 
   --font-serif: "Playfair Display", Georgia, serif;
   --font-cinzel: "Cinzel", serif;
@@ -22,7 +22,7 @@
   }
   
   body {
-    @apply bg-brand-ivory text-brand-charcoal font-sans antialiased selection:bg-brand-wine selection:text-white;
+    @apply bg-brandIvory text-brandCharcoal font-sans antialiased selection:bg-brandWine selection:text-white;
     font-size: 17px;
     line-height: 1.68;
     -webkit-tap-highlight-color: transparent;
@@ -42,10 +42,10 @@
   
   .portrait-frame {
     box-shadow: 0 10px 30px -8px rgba(32, 32, 32, 0.15);
-    @apply border border-brand-gold-light;
+    @apply border border-brandGoldLight;
   }
 
   .nav-link {
-    @apply block py-1.5 text-brand-charcoal hover:text-brand-wine border-b border-gray-100 transition-colors;
+    @apply block py-1.5 text-brandCharcoal hover:text-brandWine border-b border-gray-100 transition-colors;
   }
 }
