@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-ivory: #F7F5F0;
+  --color-brand-charcoal: #202020;
+  --color-brand-burgundy: #6E1F2A;
+  --color-brand-gold: #B59A62;
+  --color-brand-gray: #E8E5DF;
+
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Inter", sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-brand-ivory text-brand-charcoal font-sans antialiased;
+    font-size: 18px;
+    line-height: 1.7;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-8 py-3 bg-brand-burgundy text-white font-medium transition-all duration-300 rounded-sm;
+  }
+  .btn-primary:hover {
+    @apply bg-brand-burgundy/90;
+  }
+
+  .btn-secondary {
+    @apply px-8 py-3 border border-brand-burgundy text-brand-burgundy font-medium transition-all duration-300 rounded-sm;
+  }
+  .btn-secondary:hover {
+    @apply bg-brand-burgundy text-white;
+  }
+
+  .section-padding {
+    @apply py-16 md:py-24;
+  }
+
+  .container-custom {
+    @apply max-w-7xl mx-auto px-6 md:px-12;
+  }
+}
