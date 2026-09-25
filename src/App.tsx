@@ -1,579 +1,642 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Menu, X, Phone, Search, Info, Mic2, MapPin, Send, ExternalLink, ChevronDown } from 'lucide-react';
+import React, { useEffect, useMemo, useState } from "react";
+import { motion } from "motion/react";
+import {
+  Menu,
+  X,
+  Phone,
+  Search,
+  Mic2,
+  MapPin,
+  ExternalLink,
+  ChevronDown,
+  Instagram,
+  Linkedin,
+  Youtube,
+  Mail,
+  Scale,
+  Landmark,
+  Shield,
+  Radio,
+  Play,
+  MessageCircle,
+} from "lucide-react";
+import { CASES_DATA, FAQS, MEDIA, PRACTICE_AREAS, PROFILE } from "./data";
 
-// Case dataset strictly from reference
-const CASES_DATA = [
-  { id: "a", title: "State v/s Mahesh Gawade and others", act: "u/s 302 of IPC", category: "ipc" },
-  { id: "b", title: "State v/s Balasaheb Galphade and others", act: "u/s 302 of IPC", category: "ipc" },
-  { id: "c", title: "State v/s Motilal Chavan and others", act: "u/s 302 of IPC", category: "ipc" },
-  { id: "d", title: "State v/s Rahul Kumbare", act: "u/s 302 of IPC", category: "ipc" },
-  { id: "e", title: "State v/s Kunal Balu Londhe", act: "POCSO", category: "pocso" },
-  { id: "f", title: "State v/s Vishal Salve", act: "u/s 376 of IPC", category: "ipc" },
-  { id: "g", title: "State v/s Usha Dukre", act: "u/s 302 of IPC", category: "ipc" },
-  { id: "h", title: "State v/s Jagdish Hirarugi", act: "POCSO", category: "pocso" },
-  { id: "i", title: "State v/s Deepak Amale", act: "MCOCA", category: "mcoc" },
-  { id: "j", title: "State v/s Harish Garad", act: "POCSO", category: "pocso" }
+const NAV = [
+  { href: "#hero", label: "Home" },
+  { href: "#about", label: "Chamber" },
+  { href: "#practice", label: "Practice" },
+  { href: "#cases", label: "Matters" },
+  { href: "#media", label: "Media" },
+  { href: "#contact", label: "Contact" },
 ];
 
+const YEARS = new Date().getFullYear() - PROFILE.since;
+
+function fade(delay = 0) {
+  return {
+    initial: { opacity: 0, y: 18 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, margin: "-80px" },
+    transition: { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] as const },
+  };
+}
+
 export default function App() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeFilter, setActiveFilter] = useState('all');
-  const [selectedCase, setSelectedCase] = useState<null | typeof CASES_DATA[0]>(null);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState("all");
+  const [selectedCase, setSelectedCase] = useState<(typeof CASES_DATA)[number] | null>(null);
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [playing, setPlaying] = useState(false);
+  const [form, setForm] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    category: "Criminal Trial Defence",
+    court: "Pune Sessions Court",
+    note: "",
+  });
+  const [sent, setSent] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-  const filteredCases = useMemo(() => {
-    return CASES_DATA.filter(item => {
-      const matchesFilter = activeFilter === 'all' || item.category === activeFilter;
-      const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                            item.act.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesFilter && matchesSearch;
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const cases = useMemo(() => {
+    return CASES_DATA.filter((item) => {
+      const byFilter = filter === "all" || item.category === filter;
+      const q = query.toLowerCase();
+      const bySearch = item.title.toLowerCase().includes(q) || item.act.toLowerCase().includes(q);
+      return byFilter && bySearch;
     });
-  }, [searchQuery, activeFilter]);
+  }, [query, filter]);
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const featured = MEDIA.find((m) => m.featured)!;
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const submitForm = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitted(true);
-    (e.target as HTMLFormElement).reset();
+    const body = [
+      `Name: ${form.name}`,
+      `Phone: ${form.phone}`,
+      `Email: ${form.email || "—"}`,
+      `Matter: ${form.category}`,
+      `Court: ${form.court}`,
+      "",
+      form.note || "(no note)",
+      "",
+      "Sent from the chamber website. Non-confidential enquiry only.",
+    ].join("\n");
+    window.location.href = `mailto:${PROFILE.email}?subject=${encodeURIComponent("Chamber consultation — " + form.name)}&body=${encodeURIComponent(body)}`;
+    setSent(true);
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Header */}
-      <header className="sticky top-0 z-40 bg-brandIvory/95 backdrop-blur-md border-b border-brandBorder" id="top-navbar">
-        <div className="mx-auto px-4 flex items-center justify-between" style={{minHeight: '64px', maxHeight: '76px'}}>
-          <a href="#hero" className="group block focus:outline-none" aria-label="Go to top">
-            <span className="block font-sans text-sm tracking-wider uppercase font-semibold text-brandWine group-hover:text-brandWineHover transition-colors">
-              Adv. Shubhangi Prasad Parulekar
+    <div className="min-h-screen">
+      <header
+        className={`fixed inset-x-0 top-0 z-40 transition-all ${
+          scrolled ? "bg-ink/95 shadow-lg shadow-ink/20 backdrop-blur-md" : "bg-ink"
+        }`}
+      >
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3">
+          <a href="#hero" className="min-w-0">
+            <span className="block truncate font-display text-[11px] tracking-[0.22em] text-gold uppercase">
+              Parulekar &amp; Associates
             </span>
-            <span className="block text-xs tracking-wide text-brandMuted uppercase font-medium mt-0.5">
-              Criminal Defence · Pune & Bombay High Court
+            <span className="block truncate font-serif text-lg text-cream leading-tight md:text-xl">
+              Adv. Shubhangi Parulekar
             </span>
           </a>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-6">
-            <a onClick={() => setIsMenuOpen(false)} className="text-base text-brandCharcoal hover:text-brandWine transition-colors font-medium" href="#hero">Home</a>
-            <a onClick={() => setIsMenuOpen(false)} className="text-base text-brandCharcoal hover:text-brandWine transition-colors font-medium" href="#experience">Background</a>
-            <a onClick={() => setIsMenuOpen(false)} className="text-base text-brandCharcoal hover:text-brandWine transition-colors font-medium" href="#practice-areas">Practice</a>
-            <a onClick={() => setIsMenuOpen(false)} className="text-base text-brandCharcoal hover:text-brandWine transition-colors font-medium" href="#case-outcomes">Cases</a>
-            <a onClick={() => setIsMenuOpen(false)} className="text-base text-brandCharcoal hover:text-brandWine transition-colors font-medium" href="#public-lectures">Media</a>
-            <a onClick={() => setIsMenuOpen(false)} className="text-base text-brandCharcoal hover:text-brandWine transition-colors font-medium" href="#contact">Contact</a>
-            <a href="tel:8308825029" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-brandWine text-white text-sm font-semibold tracking-wide hover:bg-brandWineHover transition-colors">
-              <Phone size={14} />
-              <span>Call Chamber</span>
+          <nav className="hidden items-center gap-6 lg:flex">
+            {NAV.map((item) => (
+              <a key={item.href} href={item.href} className="nav-link">
+                {item.label}
+              </a>
+            ))}
+            <a href={PROFILE.phoneHref} className="btn-gold !min-h-10 !px-4 !py-2">
+              <Phone size={14} /> Call
             </a>
           </nav>
 
-          {/* Mobile Menu Toggle */}
-          <div className="flex lg:hidden items-center gap-2">
-            <a href="tel:8308825029" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-brandWine text-white text-sm font-semibold tracking-wide hover:bg-brandWineHover transition-colors">
+          <div className="flex items-center gap-2 lg:hidden">
+            <a href={PROFILE.phoneHref} className="btn-gold !min-h-10 !px-3 !py-2">
               <Phone size={14} />
-              <span>Call</span>
             </a>
-            <button 
-              onClick={toggleMenu}
-              className="p-2 rounded border border-brandBorder text-brandCharcoal hover:bg-white transition-colors"
-              aria-label="Toggle navigation menu"
-              aria-expanded={isMenuOpen}
+            <button
+              className="rounded-sm border border-white/15 p-2 text-cream"
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-label="Menu"
             >
-              {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+              {menuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         </div>
-
-        {/* Mobile Nav - Hidden by default */}
-        <nav className={`${isMenuOpen ? 'block' : 'hidden'} lg:hidden border-t border-brandBorder bg-white px-4 py-4 shadow-lg transition-all`}>
-          <ul className="flex flex-col space-y-3 font-medium text-base">
-            <li><a onClick={() => setIsMenuOpen(false)} className="nav-link" href="#hero">Home</a></li>
-            <li><a onClick={() => setIsMenuOpen(false)} className="nav-link" href="#experience">Professional Background</a></li>
-            <li><a onClick={() => setIsMenuOpen(false)} className="nav-link" href="#practice-areas">Practice Areas</a></li>
-            <li><a onClick={() => setIsMenuOpen(false)} className="nav-link" href="#case-outcomes">Selected Acquittals</a></li>
-            <li><a onClick={() => setIsMenuOpen(false)} className="nav-link" href="#public-lectures">Media & Public Lectures</a></li>
-            <li><a onClick={() => setIsMenuOpen(false)} className="nav-link" href="#contact">Chamber Contact</a></li>
-            <li><a onClick={() => setIsMenuOpen(false)} className="nav-link block py-1.5 text-xs text-brandMuted uppercase tracking-wider border-none" href="#disclaimer">Statutory Disclaimer</a></li>
-          </ul>
-          <div className="pt-4 mt-2 border-t border-brandBorder flex flex-col gap-2">
-            <a href="tel:8308825029" className="w-full py-2.5 text-center bg-brandWine text-white font-semibold rounded text-sm tracking-wide">
-              Direct Line: 8308825029
+        {menuOpen && (
+          <nav className="border-t border-white/10 bg-navy px-4 py-4 lg:hidden">
+            {NAV.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                onClick={() => setMenuOpen(false)}
+                className="block border-b border-white/5 py-3 text-cream"
+              >
+                {item.label}
+              </a>
+            ))}
+            <a href={PROFILE.whatsapp} className="btn-gold mt-4 w-full">
+              WhatsApp the chamber
             </a>
-          </div>
-        </nav>
+          </nav>
+        )}
       </header>
 
-      <main className="flex-grow">
-        {/* Hero Section */}
-        <section className="relative px-4 mx-auto" style={{minHeight: 'calc(100svh - 76px)', maxWidth: 'min(92vw, 1400px)'}} id="hero">
-          <div className="flex flex-col justify-center min-h-full py-6 md:py-8">
-            <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.25fr)_minmax(280px,0.75fr)] gap-6 md:gap-8 items-center">
-              {/* Left Content */}
-              <div className="order-2 lg:order-1">
-                <span className="inline-block text-sm uppercase tracking-widest font-semibold text-brandWine bg-brandWine/10 px-3 py-1 rounded-sm mb-3">
-                  Criminal Defence Advocate · Maharashtra
-                </span>
-                <h1 className="font-serif font-bold text-brandCharcoal leading-tight mb-2" style={{fontSize: 'clamp(48px, 5vw, 78px)'}}>
-                  Adv. Shubhangi Prasad Parulekar
-                </h1>
-                <p className="font-sans text-brandGold font-semibold uppercase mb-4" style={{fontSize: 'clamp(14px, 1.2vw, 20px)'}}>
-                  District & Sessions Courts & Bombay High Court Appellate Side
-                </p>
-                
-                <p className="text-brandCharcoal font-serif italic mb-4" style={{fontSize: 'clamp(19px, 1.5vw, 26px)', lineHeight: '1.6', maxWidth: '720px'}}>
-                  "Result-driven Criminal Lawyer with 14+ years of proven court experience in trial defence and appellate-side jurisdiction."
-                </p>
-                <p className="text-brandMuted mb-5" style={{fontSize: 'clamp(16px, 1.2vw, 20px)', lineHeight: '1.65', maxWidth: '720px'}}>
-                  Conducting defence across District & Sessions Courts in Pune, Khed, and Baramati, alongside extensive criminal appeals before the Bombay High Court Appellate Side.
-                </p>
-                
-                <div className="flex flex-wrap items-center gap-3 mb-6">
-                  <a href="#contact" className="inline-flex items-center justify-center px-5 py-3 bg-brandWine hover:bg-brandWineHover text-white text-base font-semibold rounded shadow-sm transition-colors" style={{minHeight: '52px'}}>
-                    Schedule Consultation
-                  </a>
-                  <a href="tel:8308825029" className="inline-flex items-center justify-center px-5 py-3 bg-white border border-brandBorder text-brandCharcoal hover:bg-brandIvory text-base font-semibold rounded transition-colors" style={{minHeight: '52px'}}>
-                    <Phone size={18} className="mr-1.5 text-brandWine" />
-                    Call: 8308825029
-                  </a>
-                  <a href="#case-outcomes" className="inline-flex items-center text-base font-semibold text-brandWine hover:underline underline-offset-4 py-3">
-                    <span>View Acquittals</span>
-                    <span className="ml-1">↓</span>
-                  </a>
-                </div>
-
-                {/* Statistics */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-sm font-medium text-brandCharcoal">
-                  <div className="bg-brandIvory p-2 rounded border border-brandBorder/60">
-                    <span className="block text-brandWine font-bold" style={{fontSize: 'clamp(18px, 2vw, 20px)'}}>14+ Years</span>
-                    <span className="text-xs">Trial Experience</span>
-                  </div>
-                  <div className="bg-brandIvory p-2 rounded border border-brandBorder/60">
-                    <span className="block text-brandWine font-bold" style={{fontSize: 'clamp(18px, 2vw, 20px)'}}>Appellate Side</span>
-                    <span className="text-xs">Bombay High Court</span>
-                  </div>
-                  <div className="bg-brandIvory p-2 rounded border border-brandBorder/60">
-                    <span className="block text-brandWine font-bold" style={{fontSize: 'clamp(18px, 2vw, 20px)'}}>Sessions Courts</span>
-                    <span className="text-xs">Pune, Khed, Baramati</span>
-                  </div>
-                  <div className="bg-brandIvory p-2 rounded border border-brandBorder/60">
-                    <span className="block text-brandWine font-bold" style={{fontSize: 'clamp(18px, 2vw, 20px)'}}>Legal Aid</span>
-                    <span className="text-xs">High Court & Prison Panel</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Right - Portrait */}
-              <div className="order-1 lg:order-2 flex justify-center">
-                <div className="relative inline-block portrait-frame p-1 rounded bg-white">
-                  <img 
-                    src="/portrait.png" 
-                    alt="Advocate Shubhangi Prasad Parulekar portrait" 
-                    className="rounded object-cover lg:portrait-desktop"
-                    style={{width: 'clamp(240px, 75vw, 300px)', height: 'auto'}}
-                    loading="eager"
-                  />
-                  <div className="mt-2 text-xs uppercase tracking-wider font-semibold text-brandWine bg-brandIvory py-0.5 px-2 border border-brandBorder rounded text-center">
-                    Practising Since 2008
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Experience Section */}
-        <section className="py-10 px-4 mx-auto border-t border-brandBorder" style={{maxWidth: 'min(92vw, 1400px)'}} id="experience">
-          <div className="mb-6">
-            <span className="text-sm uppercase tracking-widest font-semibold text-brandGold block mb-1">Professional Record</span>
-            <h2 className="font-serif font-bold text-brandCharcoal" style={{fontSize: 'clamp(36px, 4vw, 60px)'}}>Experience Built in Criminal Defence</h2>
-            <p className="text-base text-brandMuted mt-1">Practising continuously across Maharashtra trial courts and appellate jurisdictions since 2008.</p>
-          </div>
-
-          <div className="space-y-4">
-            <div className="bg-white border-l-4 border-l-brandWine border border-brandBorder p-4 rounded-r-lg shadow-sm">
-              <div className="flex items-center justify-between text-xs text-brandWine font-semibold tracking-wider uppercase mb-1">
-                <span>Core Practice · 2008 – Present</span>
-                <span>Trials</span>
-              </div>
-              <h3 className="font-serif text-xl font-bold text-brandCharcoal">Criminal Defence at District & Sessions Courts</h3>
-              <p className="text-base text-brandMuted mt-1">
-                Practising in criminal defence across District & Sessions Courts in <strong>Pune</strong>, <strong>Khed</strong>, and <strong>Baramati</strong> since the year 2008.
+      <main>
+        <section id="hero" className="relative overflow-hidden bg-ink pt-24 text-cream">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(198,164,106,0.18),transparent_42%),radial-gradient(circle_at_10%_80%,rgba(123,36,51,0.25),transparent_40%)]" />
+          <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 pb-16 pt-8 lg:grid-cols-[1.15fr_0.85fr] lg:pb-20">
+            <motion.div {...fade()}>
+              <p className="eyebrow">Criminal defence · Maharashtra · Since {PROFILE.since}</p>
+              <h1 className="mt-4 font-serif text-[clamp(2.4rem,6vw,4.6rem)] leading-[1.08] text-cream">
+                Clarity in the courtroom.
+                <span className="block italic text-goldSoft">Defence that is prepared.</span>
+              </h1>
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-cream/75 md:text-lg">
+                Adv. Shubhangi Prasad Parulekar leads criminal trial and appellate work at {PROFILE.firm} — appearing before District &amp; Sessions Courts at Pune, Khed and Baramati, and on the Appellate Side of the Bombay High Court.
               </p>
-            </div>
-
-            <div className="bg-white border-l-4 border-l-brandGold border border-brandBorder p-4 rounded-r-lg shadow-sm">
-              <div className="flex items-center justify-between text-xs text-brandGold font-semibold tracking-wider uppercase mb-1">
-                <span>Appellate Practice · 2008 – Present</span>
-                <span>Appeals</span>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <a href="#contact" className="btn-gold">
+                  Request consultation
+                </a>
+                <a href={PROFILE.phoneHref} className="btn-ghost !border-white/20 !bg-transparent !text-cream hover:!border-gold">
+                  <Phone size={16} /> +91 {PROFILE.phone}
+                </a>
+                <a href="#media" className="inline-flex items-center gap-2 py-3 text-sm font-medium text-gold hover:underline">
+                  <Play size={16} /> Watch the POCSO podcast
+                </a>
               </div>
-              <h3 className="font-serif text-xl font-bold text-brandCharcoal">Defence Counsel for Appellate Side Jurisdiction</h3>
-              <p className="text-base text-brandMuted mt-1">
-                Appearing as defence counsel for Appellate side jurisdiction at the <strong>Bombay High Court</strong> continuously since the year 2008.
-              </p>
-            </div>
-
-            <div className="bg-white border-l-4 border-l-brandCharcoal border border-brandBorder p-4 rounded-r-lg shadow-sm">
-              <div className="flex items-center justify-between text-xs text-brandCharcoal font-semibold tracking-wider uppercase mb-1">
-                <span>Special Acts Prosecution Defence</span>
-                <span>Substantive Law</span>
-              </div>
-              <h3 className="font-serif text-xl font-bold text-brandCharcoal">Conducted Trials Under Special Criminal Enactments</h3>
-              <p className="text-base text-brandMuted mt-1 mb-2">
-                Regularly conducted comprehensive trials under specialized penal enactments:
-              </p>
-              <div className="flex flex-wrap gap-1.5 text-sm">
-                {['POCSO Act', 'MCOCA', 'NDPS Act', 'Body Offences (IPC 302, 376)', 'Economic Offences'].map(act => (
-                  <span key={act} className="px-2.5 py-1 bg-brandIvory text-brandCharcoal border border-brandBorder rounded">{act}</span>
-                ))}
-              </div>
-            </div>
-
-            <div className="bg-brandCard border border-brandBorder p-4 rounded-lg shadow-sm">
-              <h3 className="font-serif text-xl font-bold text-brandWine mb-3">Institutional Appointments & Legal Aid Roles</h3>
-              <ul className="space-y-2 text-base text-brandCharcoal">
+              <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
                 {[
-                  { label: "Panel Advocate", text: "at Pune District Legal Aid Committee." },
-                  { label: "Serving Panel Advocate", text: "for Maharashtra State Legal Services Authority, Bombay High Court." },
-                  { label: "Panel Advocate", text: "at Yerawada Central Prison, Pune." },
-                  { label: "Amicus Curiae", text: "in Criminal Trials at Sessions Court, Pune." }
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-2">
-                    <span className="text-brandGold font-bold mt-0.5">▪</span>
-                    <span><strong>{item.label}</strong> {item.text}</span>
-                  </li>
+                  [`${YEARS}+`, "Years in practice"],
+                  ["BHC", "Appellate Side"],
+                  ["Special Acts", "POCSO · MCOCA · NDPS"],
+                  ["Legal aid", "Prison & High Court panels"],
+                ].map(([k, v]) => (
+                  <div key={k} className="border border-white/10 bg-white/5 p-3">
+                    <div className="font-serif text-xl text-gold">{k}</div>
+                    <div className="mt-1 text-[11px] uppercase tracking-wider text-cream/55">{v}</div>
+                  </div>
                 ))}
-              </ul>
-            </div>
+              </div>
+            </motion.div>
+
+            <motion.div className="relative mx-auto w-full max-w-md" {...fade(0.12)}>
+              <div className="portrait-frame relative overflow-hidden rounded-sm bg-navy">
+                <img
+                  src="/portrait.png"
+                  alt="Advocate Shubhangi Prasad Parulekar"
+                  className="aspect-[3/4] w-full object-cover object-top"
+                />
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink via-ink/50 to-transparent p-5">
+                  <p className="font-display text-[10px] tracking-[0.28em] text-gold uppercase">Defence counsel</p>
+                  <p className="font-serif text-2xl">Shubhangi Prasad Parulekar</p>
+                  <p className="text-sm text-cream/70">Pune · Bombay High Court</p>
+                </div>
+              </div>
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-4 text-cream/70">
+                <a href={PROFILE.instagram} className="hover:text-gold" aria-label="Instagram">
+                  <Instagram size={18} />
+                </a>
+                <a href={PROFILE.linkedin} className="hover:text-gold" aria-label="LinkedIn">
+                  <Linkedin size={18} />
+                </a>
+                <a href={featured.href} className="hover:text-gold" aria-label="YouTube podcast">
+                  <Youtube size={18} />
+                </a>
+                <a href={`mailto:${PROFILE.email}`} className="hover:text-gold" aria-label="Email">
+                  <Mail size={18} />
+                </a>
+              </div>
+            </motion.div>
           </div>
         </section>
 
-        {/* Practice Areas */}
-        <section className="py-10 px-4 mx-auto border-t border-brandBorder" style={{maxWidth: 'min(92vw, 1400px)'}} id="practice-areas">
-          <div className="mb-6">
-            <span className="text-sm uppercase tracking-widest font-semibold text-brandGold block mb-1">Focus Areas</span>
-            <h2 className="font-serif font-bold text-brandCharcoal" style={{fontSize: 'clamp(36px, 4vw, 60px)'}}>Criminal Practice Areas</h2>
-            <p className="text-base text-brandMuted mt-1">Detailed statutory representation in trials, cross-examinations, bail and appellate challenges.</p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+        <section className="border-y border-line bg-paper">
+          <div className="mx-auto grid max-w-7xl gap-6 px-4 py-8 md:grid-cols-3">
             {[
-              { id: "01", title: "Criminal Trials & Trial Defence", desc: "Preparation of defence strategies, witness cross-examination, and full trial procedure in Sessions courts." },
-              { id: "02", title: "Criminal Defence & Regular Bail", desc: "Bail applications, anticipatory bail proceedings, and remand hearings across trial and appellate courts." },
-              { id: "03", title: "Appellate Criminal Matters (Bombay High Court)", desc: "Appellate Side representation challenging conviction orders and petitioning before the High Court." },
-              { id: "04", title: "POCSO Matters", desc: "Defence under Protection of Children from Sexual Offences Act before designated Special POCSO Courts." },
-              { id: "05", title: "MCOCA Matters", desc: "Special trial representation in allegations framed under Maharashtra Control of Organised Crime Act." },
-              { id: "06", title: "NDPS Act Matters", desc: "Procedural compliance and trial defence under the Narcotic Drugs and Psychotropic Substances Act." },
-              { id: "07", title: "Body Offences (IPC 302, 307 & Allied)", desc: "Sessions court trial conduct in grave offences including homicide, assault, and grievous hurt." },
-              { id: "08", title: "Economic Offences & Financial Crime", desc: "Criminal breach of trust, cheating, and allied financial criminal trials under statutory frameworks." },
-              { id: "09", title: "Sessions Court Matters (Pune, Khed, Baramati)", desc: "Direct representation across regional taluka and district judicial centers in Pune district." },
-              { id: "10", title: "Legal Aid & Panel Advocacy", desc: "Institutional representation through Yerawada Prison, State Legal Services, and Amicus assignments." }
-            ].map(area => (
-              <div key={area.id} className="p-4 bg-white border border-brandBorder rounded-lg shadow-sm hover:border-brandGold transition-colors">
-                <span className="text-sm font-sans font-bold text-brandWine">{area.id}</span>
-                <h3 className="font-serif text-xl font-bold text-brandCharcoal mt-0.5">{area.title}</h3>
-                <p className="text-sm text-brandMuted mt-1 leading-relaxed">{area.desc}</p>
+              { icon: Landmark, t: "Trial courts", d: "Pune, Khed & Baramati Sessions" },
+              { icon: Scale, t: "Appellate side", d: "Bombay High Court since 2008" },
+              { icon: Shield, t: "Special statutes", d: "POCSO · MCOCA · NDPS · MPID" },
+            ].map((item) => (
+              <div key={item.t} className="flex items-start gap-3">
+                <item.icon className="mt-0.5 text-wine" size={22} />
+                <div>
+                  <p className="font-serif text-xl">{item.t}</p>
+                  <p className="text-sm text-muted">{item.d}</p>
+                </div>
               </div>
             ))}
           </div>
-          <p className="mt-4 text-sm text-brandMuted italic">* Each matter is evaluated strictly on its individual statutory provisions, evidentiary record, and criminal procedure.</p>
         </section>
 
-        {/* Case Outcomes */}
-        <section className="py-10 px-4 mx-auto border-t border-brandBorder" style={{maxWidth: 'min(92vw, 1400px)'}} id="case-outcomes">
-          <div className="mb-4">
-            <span className="text-sm uppercase tracking-widest font-semibold text-brandGold block mb-1">Factual Court Records</span>
-            <h2 className="font-serif font-bold text-brandCharcoal" style={{fontSize: 'clamp(36px, 4vw, 60px)'}}>Selected Criminal Cases Resulting in Acquittal</h2>
-            <p className="text-base text-brandMuted mt-1">Verified matters from trial records conducted by Adv. Shubhangi Prasad Parulekar.</p>
+        <section id="about" className="mx-auto max-w-7xl px-4 py-16 md:py-20">
+          <motion.div {...fade()}>
+            <p className="eyebrow">The chamber</p>
+            <h2 className="mt-2 max-w-3xl font-serif text-[clamp(2rem,4vw,3.4rem)] leading-tight">
+              Built in criminal courts — not on slogans.
+            </h2>
+            <p className="mt-4 max-w-3xl text-muted">
+              Since 2008 she has conducted criminal trials and High Court appellate work as defence counsel. {PROFILE.firm} is a Pune chamber handling serious criminal litigation, with allied work in civil, family and intellectual-property matters, and appearances before the High Courts at Bombay and Goa and the Supreme Court of India.
+            </p>
+          </motion.div>
+
+          <div className="mt-10 grid gap-4 lg:grid-cols-2">
+            {[
+              {
+                kicker: "2008 — Present · Trials",
+                title: "District & Sessions Courts",
+                body: "Continuous criminal defence at Pune, Khed and Baramati — including body offences, sexual-offence prosecutions, and special-act trials.",
+              },
+              {
+                kicker: "2008 — Present · Appeals",
+                title: "Bombay High Court, Appellate Side",
+                body: "Criminal appeals, bail, revisions and writs. High-stakes listings, including organised-crime and homicide matters, are argued as defence counsel.",
+              },
+              {
+                kicker: "Special Acts",
+                title: "POCSO, MCOCA, NDPS, economic crime",
+                body: "Designated-court practice under special criminal statutes, with a public voice on POCSO procedure through podcasts and the press.",
+              },
+              {
+                kicker: "Public duty",
+                title: "Legal aid, prison panel, amicus",
+                body: "Panel Advocate, Pune District Legal Aid Committee; MSLSA panel at the Bombay High Court; Yerawada Central Prison panel; amicus curiae in Sessions trials at Pune.",
+              },
+            ].map((block, i) => (
+              <motion.article key={block.title} className="card border-l-4 border-l-wine p-5 md:p-6" {...fade(i * 0.05)}>
+                <p className="text-[11px] font-semibold tracking-[0.2em] text-wine uppercase">{block.kicker}</p>
+                <h3 className="mt-1 font-serif text-2xl">{block.title}</h3>
+                <p className="mt-2 text-muted">{block.body}</p>
+              </motion.article>
+            ))}
           </div>
+        </section>
 
-          <div className="bg-brandWine/5 border-l-4 border-brandWine p-3.5 rounded-r text-sm text-brandCharcoal mb-5">
-            <strong className="font-semibold text-brandWine">Mandatory Legal Disclaimer:</strong> Past case outcomes depend on the facts, evidence, applicable law, and circumstances of each individual matter. Past outcomes do not guarantee or predict a similar result in future cases.
-          </div>
-
-          <div className="space-y-3 mb-5">
-            <div className="relative">
-              <input 
-                type="text" 
-                placeholder="Search cases by party name, act (e.g. 302, POCSO, MCOC)..." 
-                className="w-full text-base bg-white border border-brandBorder rounded-md px-3.5 py-2.5 pr-9 text-brandCharcoal placeholder-brandMuted focus:border-brandWine focus:ring-1 focus:ring-brandWine outline-none"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              <Search size={18} className="text-brandMuted absolute right-3 top-3 pointer-events-none" />
-            </div>
-
-            <div className="flex flex-wrap gap-1.5">
-              {[
-                { label: 'All Cases (10)', id: 'all' },
-                { label: 'IPC Matters (6)', id: 'ipc' },
-                { label: 'POCSO Matters (3)', id: 'pocso' },
-                { label: 'MCOCA (1)', id: 'mcoc' }
-              ].map(filter => (
-                <button 
-                  key={filter.id}
-                  className={`text-sm font-semibold px-3 py-1.5 rounded border transition-colors ${activeFilter === filter.id ? 'bg-brandWine text-white border-brandWine' : 'bg-white text-brandCharcoal border-brandBorder hover:bg-brandIvory'}`}
-                  onClick={() => setActiveFilter(filter.id)}
-                >
-                  {filter.label}
-                </button>
+        <section id="practice" className="border-y border-line bg-paper py-16 md:py-20">
+          <div className="mx-auto max-w-7xl px-4">
+            <p className="eyebrow">Focus</p>
+            <h2 className="mt-2 font-serif text-[clamp(2rem,4vw,3.4rem)]">Practice areas</h2>
+            <p className="mt-2 max-w-2xl text-muted">Each brief is assessed on the record, the statute, and what the court can actually be asked to do.</p>
+            <div className="mt-8 grid gap-3 sm:grid-cols-2">
+              {PRACTICE_AREAS.map((area) => (
+                <article key={area.id} className="card p-5 transition hover:border-gold">
+                  <span className="font-display text-xs text-wine">{area.id}</span>
+                  <h3 className="mt-1 font-serif text-xl">{area.title}</h3>
+                  <p className="mt-1 text-sm text-muted">{area.desc}</p>
+                </article>
               ))}
             </div>
           </div>
+        </section>
 
-          <div className="space-y-2.5">
-            {filteredCases.map((item, idx) => (
-              <div key={item.id} className="bg-white border border-brandBorder rounded-lg p-3.5 transition-all shadow-sm">
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="inline-block text-xs font-bold uppercase tracking-wider text-brandGold bg-brandIvory px-2 py-0.5 rounded border border-brandBorder">Case {item.id}</span>
-                      <span className="inline-block text-xs font-semibold text-brandWine bg-brandWine/10 px-2 py-0.5 rounded">{item.act}</span>
-                    </div>
-                    <h3 className="font-serif text-xl font-bold text-brandCharcoal">{item.title}</h3>
-                    <p className="text-sm text-brandMuted mt-0.5">Offence: {item.category === 'ipc' ? 'Indian Penal Code matter' : item.category.toUpperCase() + ' Special Act matter'}</p>
+        <section id="cases" className="mx-auto max-w-7xl px-4 py-16 md:py-20">
+          <p className="eyebrow">Court record</p>
+          <h2 className="mt-2 font-serif text-[clamp(2rem,4vw,3.4rem)]">Selected acquittals</h2>
+          <div className="mt-4 border-l-4 border-wine bg-wine/5 p-4 text-sm">
+            <strong className="text-wine">Disclaimer.</strong> Past outcomes depend on the facts, evidence and law of each matter. They do not guarantee a similar result later.
+          </div>
+
+          <div className="relative mt-6">
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search by party or statute — 302, POCSO, MCOCA…"
+              className="input pr-10"
+            />
+            <Search size={18} className="pointer-events-none absolute right-3 top-3 text-muted" />
+          </div>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {[
+              ["all", "All (10)"],
+              ["ipc", "IPC"],
+              ["pocso", "POCSO"],
+              ["mcoc", "MCOCA"],
+            ].map(([id, label]) => (
+              <button
+                key={id}
+                onClick={() => setFilter(id)}
+                className={`rounded-sm border px-3 py-1.5 text-sm font-semibold ${
+                  filter === id ? "border-wine bg-wine text-white" : "border-line bg-paper hover:border-gold"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          <div className="mt-5 space-y-2.5">
+            {cases.map((item) => (
+              <article key={item.id} className="card flex flex-wrap items-start justify-between gap-3 p-4">
+                <div>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="rounded-sm bg-cream px-2 py-0.5 text-[11px] font-bold tracking-wider text-gold uppercase">
+                      Case {item.id}
+                    </span>
+                    <span className="rounded-sm bg-wine/10 px-2 py-0.5 text-[11px] font-semibold text-wine">{item.act}</span>
                   </div>
-                  <div className="text-right flex-shrink-0">
-                    <span className="inline-flex items-center px-2 py-1 bg-green-50 text-green-800 border border-green-200 text-sm font-bold rounded">Acquittal</span>
-                  </div>
+                  <h3 className="mt-1 font-serif text-xl">{item.title}</h3>
                 </div>
-                <button 
-                  onClick={() => setSelectedCase(item)}
-                  className="mt-2 text-sm font-semibold text-brandWine hover:underline inline-flex items-center"
+                <div className="flex items-center gap-3">
+                  <span className="rounded-sm border border-emerald-200 bg-emerald-50 px-2 py-1 text-sm font-bold text-emerald-900">
+                    Acquittal
+                  </span>
+                  <button className="text-sm font-semibold text-wine hover:underline" onClick={() => setSelectedCase(item)}>
+                    Record →
+                  </button>
+                </div>
+              </article>
+            ))}
+            {cases.length === 0 && <p className="card p-8 text-center text-muted">No matching record.</p>}
+          </div>
+        </section>
+
+        <section id="media" className="border-y border-line bg-ink py-16 text-cream md:py-20">
+          <div className="mx-auto max-w-7xl px-4">
+            <p className="eyebrow">In public</p>
+            <h2 className="mt-2 font-serif text-[clamp(2rem,4vw,3.4rem)]">Podcasts, press &amp; lectures</h2>
+            <p className="mt-2 max-w-2xl text-cream/65">
+              Legal literacy in Marathi and English — on trial courts, POCSO, senior-citizen law, and workplace POSH.
+            </p>
+
+            <div className="mt-8 grid gap-6 lg:grid-cols-[1.4fr_0.8fr]">
+              <div className="overflow-hidden rounded-sm border border-white/10 bg-navy">
+                {playing ? (
+                  <div className="aspect-video">
+                    <iframe
+                      className="h-full w-full"
+                      src={`https://www.youtube.com/embed/${featured.id}?autoplay=1`}
+                      title={featured.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    />
+                  </div>
+                ) : (
+                  <button className="group relative block w-full text-left" onClick={() => setPlaying(true)}>
+                    <img
+                      src={`https://i.ytimg.com/vi/${featured.id}/hqdefault.jpg`}
+                      alt=""
+                      className="aspect-video w-full object-cover opacity-90 transition group-hover:opacity-100"
+                    />
+                    <span className="absolute inset-0 flex items-center justify-center bg-ink/25">
+                      <span className="flex h-16 w-16 items-center justify-center rounded-full bg-wine text-white shadow-xl">
+                        <Play size={28} fill="currentColor" />
+                      </span>
+                    </span>
+                  </button>
+                )}
+                <div className="p-5">
+                  <p className="text-[11px] tracking-[0.2em] text-gold uppercase">{featured.outlet}</p>
+                  <h3 className="mt-1 font-serif text-2xl">{featured.title}</h3>
+                  <p className="mt-2 text-sm text-cream/70">{featured.blurb}</p>
+                  <a href={featured.href} target="_blank" rel="noreferrer" className="mt-3 inline-flex items-center gap-1 text-sm text-gold hover:underline">
+                    Open on YouTube <ExternalLink size={12} />
+                  </a>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                {MEDIA.filter((m) => !m.featured).map((item) => (
+                  <a
+                    key={item.id}
+                    href={item.href}
+                    target={item.href.startsWith("http") ? "_blank" : undefined}
+                    rel="noreferrer"
+                    className="block border border-white/10 bg-white/5 p-4 transition hover:border-gold/50"
+                  >
+                    <div className="flex items-start gap-3">
+                      {item.kind === "youtube" ? <Youtube className="text-gold" size={18} /> : item.kind === "radio" ? <Radio className="text-gold" size={18} /> : <Mic2 className="text-gold" size={18} />}
+                      <div>
+                        <p className="text-[11px] tracking-wider text-gold/80 uppercase">{item.outlet}</p>
+                        <h3 className="font-serif text-lg leading-snug">{item.title}</h3>
+                        <p className="mt-1 text-sm text-cream/60">{item.blurb}</p>
+                      </div>
+                    </div>
+                  </a>
+                ))}
+                <a
+                  href={PROFILE.instagram}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center justify-between border border-gold/30 bg-gold/10 p-4"
                 >
-                  <span>View Record Verification</span>
-                  <span className="ml-1">→</span>
+                  <span className="inline-flex items-center gap-2 font-medium">
+                    <Instagram size={18} /> Instagram @spparulekar
+                  </span>
+                  <ExternalLink size={14} />
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-7xl px-4 py-16 md:py-20">
+          <p className="eyebrow">Before you write</p>
+          <h2 className="mt-2 font-serif text-[clamp(2rem,4vw,3.2rem)]">Frequently asked</h2>
+          <div className="mt-8 divide-y divide-line border border-line bg-paper">
+            {FAQS.map((item, i) => (
+              <div key={item.q}>
+                <button
+                  className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
+                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                >
+                  <span className="font-serif text-lg">{item.q}</span>
+                  <ChevronDown size={18} className={`shrink-0 transition ${openFaq === i ? "rotate-180" : ""}`} />
                 </button>
+                {openFaq === i && <p className="px-5 pb-4 text-sm text-muted">{item.a}</p>}
               </div>
             ))}
-            {filteredCases.length === 0 && (
-              <div className="text-center py-8 bg-white border border-brandBorder rounded-lg text-base text-brandMuted">
-                No case records match your search filter.
-              </div>
-            )}
           </div>
         </section>
 
-        {/* Media Section */}
-        <section className="py-10 px-4 mx-auto border-t border-brandBorder" style={{maxWidth: 'min(92vw, 1400px)'}} id="public-lectures">
-          <div className="mb-5">
-            <span className="text-sm uppercase tracking-widest font-semibold text-brandGold block mb-1">Public Legal Awareness</span>
-            <h2 className="font-serif font-bold text-brandCharcoal" style={{fontSize: 'clamp(36px, 4vw, 60px)'}}>Legal Awareness & Public Lectures</h2>
-            <p className="text-base text-brandMuted mt-1">Disseminating legal education on rights of senior citizens and criminal justice procedure.</p>
-          </div>
+        <section id="contact" className="border-t border-line bg-paper py-16 md:py-20">
+          <div className="mx-auto max-w-7xl px-4">
+            <p className="eyebrow">Chamber</p>
+            <h2 className="mt-2 font-serif text-[clamp(2rem,4vw,3.4rem)]">Discuss the matter</h2>
+            <p className="mt-3 max-w-2xl rounded-sm border border-amber-200 bg-amber-50 p-3 text-sm text-amber-950">
+              Do not send FIRs, medical records or other confidential papers through this form. Call or visit chamber for those.
+            </p>
 
-          <div className="bg-white border border-brandBorder p-5 rounded-lg shadow-sm">
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-full bg-brandWine/10 text-brandWine flex items-center justify-center flex-shrink-0">
-                <Mic2 size={20} />
-              </div>
-              <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-brandWine bg-brandWine/10 px-2 py-0.5 rounded">All India Radio Broadcast</span>
-                <h3 className="font-serif text-xl font-bold text-brandCharcoal mt-1">Maintenance and Welfare of Senior Citizens Act (2007)</h3>
-                <p className="text-base text-brandMuted mt-2 leading-relaxed">
-                  Delivered educational broadcast lectures on the Maintenance and Welfare of Parents and Senior Citizens Act of 2007 on <strong>All India Radio</strong>, elucidating the statutory protections, tribunal processes, and maintenance provisions available to elders under Indian law.
-                </p>
-                <div className="mt-3 text-sm text-brandMuted bg-brandIvory p-2.5 rounded border border-brandBorder">
-                  Archived educational topics and statutory notes can be referenced during chamber legal consultations.
+            <div className="mt-8 grid gap-6 lg:grid-cols-5">
+              <aside className="card p-6 lg:col-span-2">
+                <h3 className="font-display text-xs tracking-[0.22em] text-wine uppercase">Office</h3>
+                <p className="mt-3 font-serif text-2xl">{PROFILE.name}</p>
+                <p className="text-sm text-muted">{PROFILE.firm}</p>
+                <div className="mt-5 space-y-4 text-sm">
+                  <p className="flex gap-2">
+                    <MapPin size={16} className="mt-0.5 text-wine" />
+                    <span>
+                      {PROFILE.addressLines.map((l) => (
+                        <span key={l} className="block">
+                          {l}
+                        </span>
+                      ))}
+                    </span>
+                  </p>
+                  <p>
+                    <a href={PROFILE.phoneHref} className="font-semibold text-wine hover:underline">
+                      +91 {PROFILE.phone}
+                    </a>
+                  </p>
+                  <p>
+                    <a href={`mailto:${PROFILE.email}`} className="font-semibold text-wine hover:underline">
+                      {PROFILE.email}
+                    </a>
+                  </p>
                 </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Contact Section */}
-        <section className="py-10 px-4 mx-auto border-t border-brandBorder" style={{maxWidth: 'min(92vw, 1400px)'}} id="contact">
-          <div className="mb-6">
-            <span className="text-sm uppercase tracking-widest font-semibold text-brandGold block mb-1">Chamber Office</span>
-            <h2 className="font-serif font-bold text-brandCharcoal" style={{fontSize: 'clamp(36px, 4vw, 60px)'}}>Discuss Your Legal Matter</h2>
-            <p className="text-base text-brandMuted mt-1">For professional legal representation or consultation in criminal trials and appeals.</p>
-          </div>
-
-          <div className="mb-6 p-3 bg-amber-50 border border-amber-200 text-amber-900 rounded-md text-sm leading-relaxed">
-            <strong>Important Confidentiality Notice:</strong> Please do not submit confidential trial records or sensitive case evidence through web forms. Chamber consultations can be arranged in person or by direct telephone.
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-            <div className="md:col-span-2 space-y-4">
-              <div className="bg-white p-5 border border-brandBorder rounded-lg shadow-sm">
-                <h3 className="font-sans text-base uppercase tracking-wider text-brandWine font-bold mb-3">Chamber Office</h3>
-                <div className="space-y-3.5 text-base text-brandCharcoal">
-                  <div>
-                    <span className="block text-xs uppercase tracking-wider text-brandMuted font-medium">Advocate Name</span>
-                    <span className="font-semibold text-brandCharcoal">Adv. Shubhangi Prasad Parulekar</span>
-                  </div>
-                  <div>
-                    <span className="block text-xs uppercase tracking-wider text-brandMuted font-medium">Chamber Address</span>
-                    <p className="mt-0.5 leading-snug">
-                      308, 3rd Floor, Amit Court Condominium,<br />
-                      Shivajinagar, Pune – 411005,<br />
-                      Maharashtra, India.
-                    </p>
-                  </div>
-                  <div>
-                    <span className="block text-xs uppercase tracking-wider text-brandMuted font-medium">Direct Telephone</span>
-                    <a href="tel:8308825029" className="font-semibold text-brandWine hover:underline">+91 8308825029</a>
-                  </div>
-                  <div>
-                    <span className="block text-xs uppercase tracking-wider text-brandMuted font-medium">Electronic Mail</span>
-                    <a href="mailto:spparulekar@gmail.com" className="font-semibold text-brandWine hover:underline break-all">spparulekar@gmail.com</a>
-                  </div>
+                <div className="mt-6 flex flex-col gap-2">
+                  <a href={PROFILE.phoneHref} className="btn-primary">
+                    <Phone size={16} /> Call chamber
+                  </a>
+                  <a href={PROFILE.whatsapp} className="btn-ghost">
+                    <MessageCircle size={16} /> WhatsApp
+                  </a>
+                  <a href={PROFILE.maps} target="_blank" rel="noreferrer" className="btn-ghost">
+                    Directions <ExternalLink size={12} />
+                  </a>
                 </div>
-
-                <div className="mt-5 pt-4 border-t border-brandBorder flex flex-col gap-2">
-                  <a href="tel:8308825029" className="w-full text-center py-2 px-3 bg-brandWine hover:bg-brandWineHover text-white text-sm font-semibold rounded transition-colors">Call Chamber: 8308825029</a>
-                  <a href="mailto:spparulekar@gmail.com" className="w-full text-center py-2 px-3 bg-brandIvory hover:bg-brandBorder text-brandCharcoal text-sm font-semibold rounded border border-brandBorder transition-colors">Send Direct Email</a>
-                  <a href="https://maps.google.com/?q=Amit+Court+Condominium+Shivajinagar+Pune+411005" target="_blank" rel="noopener noreferrer" className="w-full text-center py-2 px-3 bg-white text-brandWine hover:bg-brandIvory text-sm font-semibold rounded border border-brandWine/30 transition-colors inline-flex items-center justify-center gap-1">Directions to Amit Court <ExternalLink size={12} /></a>
+                <div className="mt-6 flex gap-4 text-muted">
+                  <a href={PROFILE.instagram} aria-label="Instagram" className="hover:text-wine">
+                    <Instagram size={18} />
+                  </a>
+                  <a href={PROFILE.linkedin} aria-label="LinkedIn" className="hover:text-wine">
+                    <Linkedin size={18} />
+                  </a>
+                  <a href={featured.href} aria-label="YouTube" className="hover:text-wine">
+                    <Youtube size={18} />
+                  </a>
                 </div>
-              </div>
-            </div>
+              </aside>
 
-            <div className="md:col-span-3">
-              <div className="bg-white p-5 sm:p-6 border border-brandBorder rounded-lg shadow-sm">
-                <h3 className="font-serif text-xl font-bold text-brandCharcoal mb-1">Request a Consultation</h3>
-                <p className="text-sm text-brandMuted mb-4">Complete the form below to receive consultation scheduling details from the chamber office.</p>
-                <form className="space-y-3.5" onSubmit={handleFormSubmit}>
+              <div className="card p-6 lg:col-span-3">
+                <h3 className="font-serif text-2xl">Consultation request</h3>
+                <form className="mt-4 space-y-3" onSubmit={submitForm}>
                   <div>
-                    <label className="block text-xs font-semibold text-brandCharcoal uppercase tracking-wider mb-1">Full Name <span className="text-red-700">*</span></label>
-                    <input required type="text" className="w-full text-base bg-white border border-brandBorder rounded px-3 py-2 text-brandCharcoal focus:border-brandWine focus:ring-1 focus:ring-brandWine outline-none" />
+                    <label className="mb-1 block text-[11px] font-semibold tracking-wider uppercase">Full name *</label>
+                    <input required className="input" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-brandCharcoal uppercase tracking-wider mb-1">Phone Number <span className="text-red-700">*</span></label>
-                    <input required type="tel" className="w-full text-base bg-white border border-brandBorder rounded px-3 py-2 text-brandCharcoal focus:border-brandWine focus:ring-1 focus:ring-brandWine outline-none" />
+                    <label className="mb-1 block text-[11px] font-semibold tracking-wider uppercase">Phone *</label>
+                    <input required type="tel" className="input" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-brandCharcoal uppercase tracking-wider mb-1">Email Address</label>
-                    <input type="email" className="w-full text-base bg-white border border-brandBorder rounded px-3 py-2 text-brandCharcoal focus:border-brandWine focus:ring-1 focus:ring-brandWine outline-none" />
+                    <label className="mb-1 block text-[11px] font-semibold tracking-wider uppercase">Email</label>
+                    <input type="email" className="input" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="grid gap-3 sm:grid-cols-2">
                     <div>
-                      <label className="block text-xs font-semibold text-brandCharcoal uppercase tracking-wider mb-1">Matter Category</label>
-                      <select className="w-full text-sm bg-white border border-brandBorder rounded px-2.5 py-2 text-brandCharcoal outline-none">
-                        <option>Criminal Trial Defence</option>
-                        <option>Bail / Anticipatory Bail</option>
-                        <option>POCSO Act Matter</option>
-                        <option>MCOCA Special Act</option>
-                        <option>NDPS Act Matter</option>
-                        <option>Bombay High Court Appeal</option>
-                        <option>Legal Advisory / Consultation</option>
+                      <label className="mb-1 block text-[11px] font-semibold tracking-wider uppercase">Matter</label>
+                      <select className="input" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
+                        {["Criminal Trial Defence", "Bail / Anticipatory Bail", "POCSO", "MCOCA", "NDPS", "High Court Appeal", "POSH / Advisory"].map((o) => (
+                          <option key={o}>{o}</option>
+                        ))}
                       </select>
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-brandCharcoal uppercase tracking-wider mb-1">Jurisdiction</label>
-                      <select className="w-full text-sm bg-white border border-brandBorder rounded px-2.5 py-2 text-brandCharcoal outline-none">
-                        <option>Pune Sessions Court</option>
-                        <option>Khed Court</option>
-                        <option>Baramati Court</option>
-                        <option>Bombay High Court (Appellate)</option>
-                        <option>Other Maharashtra Court</option>
+                      <label className="mb-1 block text-[11px] font-semibold tracking-wider uppercase">Court</label>
+                      <select className="input" value={form.court} onChange={(e) => setForm({ ...form, court: e.target.value })}>
+                        {["Pune Sessions Court", "Khed Court", "Baramati Court", "Bombay High Court", "Other"].map((o) => (
+                          <option key={o}>{o}</option>
+                        ))}
                       </select>
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-brandCharcoal uppercase tracking-wider mb-1">Brief Inquiry (Non-confidential)</label>
-                    <textarea rows={3} className="w-full text-base bg-white border border-brandBorder rounded px-3 py-2 text-brandCharcoal focus:border-brandWine focus:ring-1 focus:ring-brandWine outline-none"></textarea>
+                    <label className="mb-1 block text-[11px] font-semibold tracking-wider uppercase">Brief, non-confidential note</label>
+                    <textarea rows={3} className="input" value={form.note} onChange={(e) => setForm({ ...form, note: e.target.value })} />
                   </div>
-                  <button type="submit" className="w-full py-2.5 bg-brandWine hover:bg-brandWineHover text-white text-base font-semibold rounded shadow transition-colors" style={{minHeight: '48px'}}>Submit Consultation Request</button>
+                  <button className="btn-primary w-full" type="submit">
+                    Open email to chamber
+                  </button>
                 </form>
-                {isSubmitted && (
-                  <div className="mt-4 p-3 bg-green-50 border border-green-200 text-green-900 rounded text-sm leading-relaxed" role="alert">
-                    <strong>Request Received:</strong> Your inquiry has been documented. For urgent bail or court hearing dates, please call the chamber directly at <strong>+91 8308825029</strong>.
-                  </div>
+                {sent && (
+                  <p className="mt-3 rounded-sm border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-950">
+                    Your mail client should open with the enquiry. For listings or bail today, call +91 {PROFILE.phone}.
+                  </p>
                 )}
               </div>
             </div>
           </div>
         </section>
 
-        {/* Disclaimer Section */}
-        <section className="py-8 px-4 mx-auto border-t border-brandBorder bg-brandIvory pb-20 md:pb-8" style={{maxWidth: 'min(92vw, 1400px)'}} id="disclaimer">
-          <div className="p-4 bg-white/70 border border-brandBorder rounded-md text-sm text-brandMuted leading-relaxed">
-            <h4 className="font-sans text-sm uppercase tracking-wider font-bold text-brandWine mb-1.5">Bar Council of India Professional Regulation & Statutory Disclaimer</h4>
-            <p className="mb-2">As per the rules of the Bar Council of India, advocates are prohibited from soliciting work or advertising. By accessing this website (or any linked content), the user acknowledges that the information provided herein is solely for informational purposes at the user's voluntary request.</p>
-            <p>No material provided on this profile should be construed as legal advice or solicitation. Transmission, receipt or use of this website does not form or constitute an advocate-client relationship. Prior outcomes, acquittals, or court representations do not guarantee identical results in future proceedings.</p>
+        <section id="disclaimer" className="mx-auto max-w-7xl px-4 py-10 pb-24 md:pb-10">
+          <div className="border border-line bg-white/70 p-5 text-sm leading-relaxed text-muted">
+            <h4 className="mb-2 font-display text-[11px] tracking-[0.2em] text-wine uppercase">Statutory disclaimer</h4>
+            <p>
+              As per the Bar Council of India, advocates are prohibited from soliciting work or advertising. Information here is for the visitor who has chosen to view this profile. It is not legal advice. Transmission or use of this site does not create an advocate–client relationship. Prior acquittals do not predict future results.
+            </p>
           </div>
         </section>
-
-        {/* Mobile Bottom Action Bar */}
-        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-brandCharcoal border-t border-brandWine z-50" style={{paddingBottom: 'env(safe-area-inset-bottom)'}}>
-          <div className="flex">
-            <a href="tel:8308825029" className="flex-1 flex items-center justify-center py-4 text-white font-semibold text-base border-r border-white/10 hover:bg-brandWine transition-colors">
-              <Phone size={18} className="mr-2" />
-              CALL
-            </a>
-            <a href="#contact" className="flex-1 flex items-center justify-center py-4 text-white font-semibold text-base hover:bg-brandWine transition-colors">
-              CONSULT
-            </a>
-          </div>
-        </div>
-
-        {/* Footer */}
-        <footer className="bg-brandCharcoal text-white pt-8 pb-12 border-t border-brandWine">
-          <div className="mx-auto px-4" style={{maxWidth: 'min(92vw, 1400px)'}}>
-            <div className="flex flex-col sm:flex-row items-start justify-between gap-6 pb-6 border-b border-white/10 text-sm">
-              <div>
-                <span className="block font-sans text-base uppercase tracking-wider font-bold text-brandGoldLight">Adv. Shubhangi Prasad Parulekar</span>
-                <span className="block text-white/70 mt-1">Criminal Defence Advocate · Enrolled & Practising Since 2008</span>
-                <span className="block text-white/60 mt-0.5">District & Sessions Courts Pune, Khed, Baramati · Bombay High Court</span>
-              </div>
-              <div className="text-left sm:text-right space-y-1 text-white/80">
-                <div>308, 3rd Floor, Amit Court Condominium</div>
-                <div>Shivajinagar, Pune – 411005</div>
-                <div>Phone: <a href="tel:8308825029" className="text-brandGoldLight hover:underline font-semibold">+91 8308825029</a></div>
-                <div>Email: <a href="mailto:spparulekar@gmail.com" className="text-brandGoldLight hover:underline">spparulekar@gmail.com</a></div>
-              </div>
-            </div>
-            <div className="pt-6 text-center text-white/50 text-sm">
-              <p>© 2024 Adv. Shubhangi Prasad Parulekar. All rights reserved.</p>
-              <p className="mt-1">Official profile of a practising criminal defence advocate in Maharashtra, India.</p>
-            </div>
-          </div>
-        </footer>
       </main>
 
-      {/* Case Detail Modal */}
+      <div className="fixed inset-x-0 bottom-0 z-50 grid grid-cols-2 lg:hidden" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
+        <a href={PROFILE.phoneHref} className="flex items-center justify-center gap-2 bg-ink py-3.5 font-semibold tracking-wider text-white uppercase">
+          <Phone size={16} /> Call
+        </a>
+        <a href={PROFILE.whatsapp} className="flex items-center justify-center gap-2 bg-wine py-3.5 font-semibold tracking-wider text-white uppercase">
+          <MessageCircle size={16} /> WhatsApp
+        </a>
+      </div>
+
+      <footer className="bg-ink pb-8 pt-10 text-cream">
+        <div className="mx-auto flex max-w-7xl flex-col justify-between gap-6 px-4 sm:flex-row">
+          <div>
+            <p className="font-display text-[11px] tracking-[0.22em] text-gold uppercase">{PROFILE.firm}</p>
+            <p className="font-serif text-2xl">{PROFILE.name}</p>
+            <p className="mt-1 text-sm text-cream/55">Criminal defence · Practising since {PROFILE.since}</p>
+          </div>
+          <div className="text-sm text-cream/70 sm:text-right">
+            {PROFILE.addressLines.map((l) => (
+              <div key={l}>{l}</div>
+            ))}
+            <div className="mt-1">
+              <a href={PROFILE.phoneHref} className="text-gold hover:underline">
+                +91 {PROFILE.phone}
+              </a>
+            </div>
+          </div>
+        </div>
+        <p className="mx-auto mt-8 max-w-7xl px-4 text-center text-xs text-cream/40">
+          © {new Date().getFullYear()} {PROFILE.name}. Informational profile of a practising advocate in Maharashtra.
+        </p>
+      </footer>
+
       {selectedCase && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg max-w-lg w-full p-5 border border-brandBorder shadow-2xl relative text-brandCharcoal">
-            <button 
-              onClick={() => setSelectedCase(null)}
-              className="absolute top-3.5 right-3.5 p-1 rounded-full text-brandMuted hover:text-brandCharcoal hover:bg-brandIvory"
-            >
-              <X size={20} />
+        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-ink/70 p-4" onClick={() => setSelectedCase(null)}>
+          <div className="card relative max-w-lg p-6" onClick={(e) => e.stopPropagation()}>
+            <button className="absolute right-3 top-3 p-1 text-muted" onClick={() => setSelectedCase(null)} aria-label="Close">
+              <X size={18} />
             </button>
-            <span className="inline-block text-xs font-bold uppercase tracking-wider text-brandWine bg-brandWine/10 px-2 py-0.5 rounded mb-2">
-              Verified Case {selectedCase.id.toUpperCase()} Record
-            </span>
-            <h3 className="font-serif text-xl font-bold text-brandCharcoal pr-6">
-              {selectedCase.title}
-            </h3>
-            <div className="mt-3 space-y-2.5 text-sm text-brandCharcoal border-t border-b border-brandBorder py-3">
+            <p className="text-[11px] font-bold tracking-wider text-wine uppercase">Record {selectedCase.id}</p>
+            <h3 className="mt-1 pr-6 font-serif text-2xl">{selectedCase.title}</h3>
+            <dl className="mt-4 space-y-2 border-y border-line py-3 text-sm">
               <div>
-                <span className="text-brandMuted uppercase tracking-wider block">Statutory Section / Offence:</span>
-                <span className="font-semibold text-brandWine">{selectedCase.act}</span>
+                <dt className="text-muted">Statute</dt>
+                <dd className="font-semibold text-wine">{selectedCase.act}</dd>
               </div>
               <div>
-                <span className="text-brandMuted uppercase tracking-wider block">Court Proceeding Result:</span>
-                <span className="inline-flex items-center px-2 py-0.5 bg-green-100 text-green-900 font-bold rounded">Acquittal Confirmed</span>
+                <dt className="text-muted">Result</dt>
+                <dd className="font-bold text-emerald-800">Acquittal</dd>
               </div>
               <div>
-                <span className="text-brandMuted uppercase tracking-wider block">Appearing Defence Counsel:</span>
-                <span className="font-medium text-brandCharcoal">Adv. Shubhangi Prasad Parulekar</span>
+                <dt className="text-muted">Counsel</dt>
+                <dd>{PROFILE.name}</dd>
               </div>
-              <div>
-                <span className="text-brandMuted uppercase tracking-wider block">Jurisdiction:</span>
-                <span className="font-medium text-brandCharcoal">District & Sessions Courts / Special Designated Court (Maharashtra)</span>
-              </div>
-            </div>
-            <div className="mt-3 text-xs text-brandMuted italic leading-normal">
-              * Listed strictly as certified in professional court documentation. In compliance with privacy guidelines, further judicial transcripts and certified judgment copies may be inspected at chamber consultations.
-            </div>
-            <div className="mt-4 flex justify-end">
-              <button 
-                onClick={() => setSelectedCase(null)}
-                className="px-4 py-2 bg-brandIvory hover:bg-brandBorder border border-brandBorder rounded text-sm font-semibold text-brandCharcoal"
-              >
-                Close Window
-              </button>
-            </div>
+            </dl>
+            <p className="mt-3 text-xs italic text-muted">Further papers may be inspected only in chamber, subject to privacy and court rules.</p>
           </div>
         </div>
       )}

@@ -1,76 +1,102 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brandIvory: #F7F5F0;
-  --color-brandCharcoal: #202020;
-  --color-brandWine: #6E1F2A;
-  --color-brandWineHover: #571720;
-  --color-brandGold: #B59A62;
-  --color-brandGoldLight: #D6C498;
-  --color-brandBorder: #E8E5DF;
-  --color-brandCard: #FFFFFF;
-  --color-brandMuted: #585550;
+  --color-ink: #0b1220;
+  --color-navy: #132038;
+  --color-navySoft: #1c2d4a;
+  --color-wine: #7b2433;
+  --color-wineHover: #611b27;
+  --color-gold: #c6a46a;
+  --color-goldSoft: #e4d2a8;
+  --color-cream: #f6f1e8;
+  --color-paper: #fbf8f2;
+  --color-line: #e4dccb;
+  --color-muted: #5d584f;
+  --color-charcoal: #1b1916;
 
-  --font-serif: "Cormorant Garamond", Georgia, serif;
-  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-serif: "Playfair Display", "Cormorant Garamond", Georgia, serif;
+  --font-display: "Cinzel", "Playfair Display", serif;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 @layer base {
   html {
-    @apply scroll-smooth;
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
   }
-  
+
   body {
-    @apply bg-brandIvory text-brandCharcoal font-sans antialiased selection:bg-brandWine selection:text-white;
-    font-size: 18px;
-    line-height: 1.6;
+    @apply bg-cream text-charcoal font-sans antialiased selection:bg-wine selection:text-white;
+    font-size: 17px;
+    line-height: 1.65;
     -webkit-tap-highlight-color: transparent;
     overflow-x: hidden;
   }
 
-  h1, h2, h3, h4, .font-heading {
-    @apply font-serif;
-    letter-spacing: -0.01em;
+  h1, h2, h3, h4 {
+    @apply font-serif tracking-tight;
   }
-  
+
   img, video, iframe {
     max-width: 100%;
-    height: auto;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #efe8d9;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #c6a46a;
+    border-radius: 99px;
   }
 }
 
 @layer components {
   .gold-rule {
     height: 1px;
-    background: linear-gradient(90deg, rgba(181, 154, 98, 0) 0%, rgba(181, 154, 98, 0.75) 50%, rgba(181, 154, 98, 0) 100%);
-  }
-  
-  .portrait-frame {
-    box-shadow: 0 10px 30px -8px rgba(32, 32, 32, 0.15);
-    @apply border border-brandGoldLight;
+    background: linear-gradient(90deg, transparent, rgba(198, 164, 106, 0.85), transparent);
   }
 
-  .portrait-desktop {
-    width: clamp(260px, 25vw, 380px) !important;
+  .eyebrow {
+    @apply font-display text-[11px] tracking-[0.28em] uppercase text-gold font-semibold;
   }
 
   .nav-link {
-    @apply block py-1.5 text-brandCharcoal hover:text-brandWine border-b border-gray-100 transition-colors;
+    @apply relative text-[13px] tracking-[0.14em] uppercase text-cream/80 hover:text-gold transition-colors;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-sm bg-wine px-5 py-3 text-[13px] font-semibold tracking-[0.12em] uppercase text-white shadow-sm transition hover:bg-wineHover;
+    min-height: 48px;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-sm border border-line bg-paper px-5 py-3 text-[13px] font-semibold tracking-[0.12em] uppercase text-charcoal transition hover:border-gold hover:text-wine;
+    min-height: 48px;
+  }
+
+  .btn-gold {
+    @apply inline-flex items-center justify-center gap-2 rounded-sm bg-gold px-5 py-3 text-[13px] font-semibold tracking-[0.12em] uppercase text-ink transition hover:bg-goldSoft;
+    min-height: 48px;
+  }
+
+  .card {
+    @apply rounded-sm border border-line bg-paper shadow-[0_10px_40px_-24px_rgba(11,18,32,0.35)];
+  }
+
+  .portrait-frame {
+    box-shadow:
+      0 0 0 1px rgba(198, 164, 106, 0.55),
+      0 24px 60px -20px rgba(11, 18, 32, 0.5);
+  }
+
+  .input {
+    @apply w-full rounded-sm border border-line bg-white px-3 py-2.5 text-base text-charcoal outline-none transition focus:border-wine focus:ring-1 focus:ring-wine;
   }
 }
 
-/* Short screen optimizations */
-@media (max-height: 800px) {
-  h1 {
-    font-size: clamp(36px, 3.5vw, 60px) !important;
-  }
-  
-  .portrait-desktop {
-    width: clamp(220px, 20vw, 320px) !important;
-  }
-}
-
-/* Mobile typography adjustments */
 @media (max-width: 767px) {
   body {
     font-size: 16px;
