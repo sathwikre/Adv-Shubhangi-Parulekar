@@ -71,6 +71,103 @@
       box-shadow: 0 10px 30px -8px rgba(23, 37, 84, 0.15);
       border: 1px solid #B08D57;
     }
+    .portrait-frame img {
+      transition: transform 420ms ease;
+    }
+    .nav-link {
+      position: relative;
+    }
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: -3px;
+      left: 0;
+      height: 1px;
+      background: currentColor;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 220ms ease;
+    }
+    .nav-link:hover::after, .nav-link:focus-visible::after {
+      transform: scaleX(1);
+    }
+    @keyframes advocateFadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes advocateImageIn {
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    html.motion-ready #hero .text-center > :nth-child(1),
+    html.motion-ready #hero .text-center > :nth-child(2),
+    html.motion-ready #hero .text-center > :nth-child(3),
+    html.motion-ready #hero .hero-actions {
+      animation: advocateFadeUp 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    html.motion-ready #hero .text-center > :nth-child(1) { animation-delay: 30ms; }
+    html.motion-ready #hero .text-center > :nth-child(2) { animation-delay: 120ms; }
+    html.motion-ready #hero .text-center > :nth-child(3) { animation-delay: 230ms; }
+    html.motion-ready #hero .hero-actions { animation-delay: 350ms; }
+    html.motion-ready #hero .portrait-frame img {
+      animation: advocateImageIn 560ms cubic-bezier(0.22, 1, 0.36, 1) 120ms backwards;
+    }
+    html.motion-ready main > section:not(#hero) {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 580ms cubic-bezier(0.22, 1, 0.36, 1), transform 580ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    html.motion-ready main > section.is-in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    #practice-areas .grid > div {
+      transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+    }
+    #practice-areas .grid > div h3 {
+      transition: color 220ms ease;
+    }
+    .case-card {
+      transition: opacity 160ms ease, transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+    }
+    .case-card .view-case-detail span:last-child {
+      display: inline-block;
+      transition: transform 200ms ease;
+    }
+    .hero-actions a, #contact a[href^="tel:"], #contact button[type="submit"] {
+      transition: transform 200ms ease, box-shadow 200ms ease, background-color 200ms ease;
+    }
+    @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+      #practice-areas .grid > div:hover {
+        transform: translateY(-3px);
+        border-color: #4B164C;
+        box-shadow: 0 12px 26px -20px rgba(75, 22, 76, 0.32);
+      }
+      #practice-areas .grid > div:hover h3 { color: #4B164C; }
+      .case-card:hover {
+        transform: translateY(-1px);
+        border-color: #4B164C;
+        box-shadow: 0 10px 24px -20px rgba(23, 37, 84, 0.35);
+      }
+      .case-card:hover .view-case-detail span:last-child { transform: translateX(4px); }
+      .portrait-frame:hover img { transform: scale(1.015); }
+      .hero-actions a:hover, #contact a[href^="tel:"]:hover, #contact button[type="submit"]:hover {
+        transform: translateY(-1px);
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+    @media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
+      html.motion-ready main > section:not(#hero) {
+        transition-duration: 460ms;
+      }
+    }
   </style>
 </head>
 <body class="min-h-screen bg-brandIvory text-brandCharcoal flex flex-col selection:bg-brandWine selection:text-white">
@@ -128,13 +225,13 @@
 <section class="relative pt-6 pb-10 px-4 max-w-4xl mx-auto" id="hero">
 <div class="text-center sm:text-left">
 <!-- Professional Eyebrow -->
-<span class="inline-block text-xs uppercase tracking-widest font-semibold text-brandWine bg-brandWine/10 px-3 py-1 rounded-sm mb-3">
+<span class="inline-block text-xs uppercase tracking-widest font-semibold text-brandWine bg-brandWine/10 px-3 py-1 rounded-sm mb-3 hero-label">
           Criminal Defence Advocate · Maharashtra
         </span>
-<h1 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-brandCharcoal leading-tight mb-2">
+<h1 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-brandCharcoal leading-tight mb-2 hero-title">
           Adv. Shubhangi Prasad Parulekar
         </h1>
-<p class="font-cinzel text-xs tracking-wider text-brandGold font-semibold uppercase mb-5">
+<p class="font-cinzel text-xs tracking-wider text-brandGold font-semibold uppercase mb-5 hero-subtitle">
           District &amp; Sessions Courts &amp; Bombay High Court Appellate Side
         </p>
 </div>
@@ -159,7 +256,7 @@
               Conducting defence across District &amp; Sessions Courts in Pune, Khed, and Baramati, alongside extensive criminal appeals before the Bombay High Court Appellate Side. Extensive panel representation in institutional legal aid and central prison defense.
             </p>
 <!-- Action Buttons Group -->
-<div class="flex flex-wrap items-center justify-center sm:justify-start gap-3">
+<div class="flex flex-wrap items-center justify-center sm:justify-start gap-3 hero-actions">
 <a class="inline-flex items-center justify-center px-4 py-2.5 bg-brandRose hover:bg-brandRoseHover text-white text-sm font-semibold rounded shadow-sm transition-colors" href="#contact">
                 Schedule Consultation
               </a>
@@ -180,7 +277,7 @@
 <!-- Credibility Badges (Strictly Factual) -->
 <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs font-medium text-brandCharcoal pt-1">
 <div class="bg-brandIvory p-2 rounded border border-brandBorder/60">
-<span class="block text-brandWine font-bold">14+ Years</span>
+<span class="block text-brandWine font-bold"><span class="inline-block min-w-[2ch] text-right tabular-nums" data-count-up="14">14</span>+ Years</span>
             Trial Experience
           </div>
 <div class="bg-brandIvory p-2 rounded border border-brandBorder/60">
@@ -916,6 +1013,50 @@
 
     let currentFilter = 'all';
     let currentSearchQuery = '';
+    const prefersReducedMotionForCases = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const activeCaseAnimations = new WeakMap();
+
+    function setCaseVisibility(card, shouldShow) {
+      const currentAnimation = activeCaseAnimations.get(card);
+      const wasAnimating = Boolean(currentAnimation);
+      if (currentAnimation) {
+        currentAnimation.cancel();
+        activeCaseAnimations.delete(card);
+      }
+
+      const wasHidden = card.classList.contains('hidden');
+      if (!shouldShow) {
+        if (wasHidden) return;
+        if (prefersReducedMotionForCases) {
+          card.classList.add('hidden');
+          return;
+        }
+        const animation = card.animate(
+          [{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(4px)' }],
+          { duration: 130, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
+        );
+        activeCaseAnimations.set(card, animation);
+        animation.onfinish = () => {
+          if (activeCaseAnimations.get(card) === animation) {
+            card.classList.add('hidden');
+            activeCaseAnimations.delete(card);
+          }
+        };
+        return;
+      }
+
+      if (wasHidden) card.classList.remove('hidden');
+      if (!prefersReducedMotionForCases && (wasHidden || wasAnimating)) {
+        const animation = card.animate(
+          [{ opacity: 0, transform: 'translateY(4px)' }, { opacity: 1, transform: 'translateY(0)' }],
+          { duration: 170, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
+        );
+        activeCaseAnimations.set(card, animation);
+        animation.onfinish = () => {
+          if (activeCaseAnimations.get(card) === animation) activeCaseAnimations.delete(card);
+        };
+      }
+    }
 
     function filterAndSearchCases() {
       let visibleCount = 0;
@@ -930,10 +1071,10 @@
                              act.includes(currentSearchQuery);
 
         if (matchesCategory && matchesQuery) {
-          card.classList.remove('hidden');
+          setCaseVisibility(card, true);
           visibleCount++;
         } else {
-          card.classList.add('hidden');
+          setCaseVisibility(card, false);
         }
       });
 
@@ -1027,5 +1168,45 @@
       successBanner.classList.remove('hidden');
       successBanner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     });
+  </script>
+<script data-purpose="premium-motion-system">
+    const prefersReducedMotionMotionSystem = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!prefersReducedMotionMotionSystem && 'IntersectionObserver' in window) {
+      document.documentElement.classList.add('motion-ready');
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-in-view');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+
+      document.querySelectorAll('main > section:not(#hero)').forEach(section => revealObserver.observe(section));
+
+      const countNodes = document.querySelectorAll('[data-count-up]');
+      if (countNodes.length) {
+        countNodes.forEach(node => { node.textContent = '0'; });
+        const countObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const node = entry.target;
+            const target = Number(node.getAttribute('data-count-up'));
+            const startTime = performance.now();
+            const tick = now => {
+              const progress = Math.min((now - startTime) / 650, 1);
+              const eased = 1 - Math.pow(1 - progress, 3);
+              node.textContent = String(Math.round(target * eased));
+              if (progress < 1) requestAnimationFrame(tick);
+            };
+            requestAnimationFrame(tick);
+            observer.unobserve(node);
+          });
+        }, { threshold: 0.5 });
+
+        countNodes.forEach(node => countObserver.observe(node));
+      }
+    }
   </script>
 </body></html>

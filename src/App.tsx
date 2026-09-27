@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence, animate, motion, useInView, useMotionValue, useReducedMotion, useTransform } from "motion/react";
 import {
   Menu,
   X,
@@ -34,12 +34,40 @@ const NAV = [
 const YEARS = new Date().getFullYear() - PROFILE.since;
 
 function fade(delay = 0, reduceMotion = false) {
+  const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches;
   return {
-    initial: reduceMotion ? false : { opacity: 0, y: 14 },
+    initial: reduceMotion ? false : { opacity: 0, y: 16 },
     whileInView: { opacity: 1, y: 0 },
     viewport: { once: true, margin: "-80px" },
-    transition: { duration: reduceMotion ? 0 : 0.68, delay: reduceMotion ? 0 : delay, ease: [0.22, 1, 0.36, 1] as const },
+    transition: { duration: reduceMotion ? 0 : isMobile ? 0.48 : 0.68, delay: reduceMotion ? 0 : delay, ease: [0.22, 1, 0.36, 1] as const },
   };
+}
+
+function heroEntrance(delay = 0, reduceMotion = false, scale = false) {
+  return {
+    initial: reduceMotion ? false : { opacity: 0, y: scale ? 0 : 12, ...(scale ? { scale: 0.97 } : {}) },
+    animate: { opacity: 1, y: 0, ...(scale ? { scale: 1 } : {}) },
+    transition: { duration: reduceMotion ? 0 : 0.4, delay: reduceMotion ? 0 : delay, ease: [0.22, 1, 0.36, 1] as const },
+  };
+}
+
+function CredentialCount({ value }: { value: number }) {
+  const ref = useRef<HTMLSpanElement | null>(null);
+  const isInView = useInView(ref, { once: true, margin: "0px" });
+  const reduceMotion = useReducedMotion();
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, (latest) => Math.round(latest));
+
+  useEffect(() => {
+    if (!isInView) return;
+    const controls = animate(count, value, {
+      duration: reduceMotion ? 0 : 0.7,
+      ease: [0.22, 1, 0.36, 1] as const,
+    });
+    return () => controls.stop();
+  }, [count, isInView, reduceMotion, value]);
+
+  return <motion.span ref={ref} className="inline-block min-w-[2ch] text-right tabular-nums">{rounded}</motion.span>;
 }
 
 export default function App() {
@@ -160,16 +188,16 @@ export default function App() {
         <section id="hero" className="relative overflow-hidden bg-ink pt-20 text-cream" style={{ backgroundImage: "linear-gradient(135deg, #172554 0%, #4B164C 100%)" }}>
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(183,110,121,0.1),transparent_42%),radial-gradient(circle_at_10%_80%,rgba(23,37,84,0.16),transparent_40%)]" />
           <div className="relative mx-auto grid max-w-7xl items-center gap-8 px-4 pb-12 pt-6 lg:grid-cols-[1.15fr_0.85fr] lg:pb-14">
-            <motion.div {...fade(0, reduceMotion ?? false)}>
-              <p className="eyebrow">Criminal defence · Maharashtra · Since {PROFILE.since}</p>
-              <h1 className="mt-3 font-serif text-[clamp(2.2rem,5vw,3.8rem)] leading-[1.08] text-cream">
+            <div>
+              <motion.p className="eyebrow" {...heroEntrance(0.03, reduceMotion ?? false)}>Criminal defence · Maharashtra · Since {PROFILE.since}</motion.p>
+              <motion.h1 className="mt-3 font-serif text-[clamp(2.2rem,5vw,3.8rem)] leading-[1.08] text-cream" {...heroEntrance(0.1, reduceMotion ?? false)}>
                 Clarity in the courtroom.
-                <span className="block italic text-goldSoft">Defence that is prepared.</span>
-              </h1>
-              <p className="mt-4 max-w-xl text-base leading-relaxed text-cream/75 md:text-base">
+                <motion.span className="block italic text-goldSoft" {...heroEntrance(0.2, reduceMotion ?? false)}>Defence that is prepared.</motion.span>
+              </motion.h1>
+              <motion.p className="mt-4 max-w-xl text-base leading-relaxed text-cream/75 md:text-base" {...heroEntrance(0.28, reduceMotion ?? false)}>
                 Adv. Shubhangi Prasad Parulekar leads criminal trial and appellate work at {PROFILE.firm} — appearing before District &amp; Sessions Courts at Pune, Khed and Baramati, and on the Appellate Side of the Bombay High Court.
-              </p>
-              <div className="mt-6 flex flex-wrap gap-3">
+              </motion.p>
+              <motion.div className="mt-6 flex flex-wrap gap-3" {...heroEntrance(0.38, reduceMotion ?? false)}>
                 <a href="#contact" className="btn-gold">
                   Request consultation
                 </a>
@@ -179,8 +207,8 @@ export default function App() {
                 <a href="#media" className="inline-flex items-center gap-2 py-3 text-sm font-medium text-gold hover:underline">
                   <Play size={16} /> Watch the POCSO podcast
                 </a>
-              </div>
-              <div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              </motion.div>
+              <motion.div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-4" {...heroEntrance(0.4, reduceMotion ?? false)}>
                 {[
                   [`${YEARS}+`, "Years in practice"],
                   ["BHC", "Appellate Side"],
@@ -188,14 +216,16 @@ export default function App() {
                   ["Legal aid", "Prison & High Court panels"],
                 ].map(([k, v]) => (
                   <div key={k} className="border border-white/15 bg-white/[0.06] p-3">
-                    <div className="font-serif text-xl text-gold">{k}</div>
+                    <div className="font-serif text-xl text-gold">
+                      {k === `${YEARS}+` ? <><CredentialCount value={YEARS} />+</> : k}
+                    </div>
                     <div className="mt-1 text-[11px] uppercase tracking-wider text-cream/55">{v}</div>
                   </div>
                 ))}
-              </div>
-            </motion.div>
+              </motion.div>
+            </div>
 
-            <motion.div className="relative mx-auto w-full max-w-sm" {...fade(0.12, reduceMotion ?? false)}>
+            <motion.div className="relative mx-auto w-full max-w-sm" {...heroEntrance(0.12, reduceMotion ?? false, true)}>
               <div className="portrait-frame relative overflow-hidden rounded-sm bg-navy">
                 <img
                   src="/image.png"
@@ -287,24 +317,24 @@ export default function App() {
           </div>
         </section>
 
-        <section id="practice" className="border-y border-line bg-paper py-12 md:py-16">
+        <motion.section id="practice" className="border-y border-line bg-paper py-12 md:py-16" {...fade(0, reduceMotion ?? false)}>
           <div className="mx-auto max-w-7xl px-4">
             <p className="eyebrow">Focus</p>
             <h2 className="mt-2 font-serif text-[clamp(1.8rem,3.5vw,3rem)]">Practice areas</h2>
             <p className="mt-2 max-w-2xl text-muted">Each brief is assessed on the record, the statute, and what the court can actually be asked to do.</p>
             <div className="mt-8 grid gap-3 sm:grid-cols-2">
               {PRACTICE_AREAS.map((area) => (
-                <article key={area.id} className="card p-5 transition hover:border-gold">
+                <article key={area.id} className="card group p-5 transition hover:border-wine">
                   <span className="font-display text-xs text-wine">{area.id}</span>
-                  <h3 className="mt-1 font-serif text-xl">{area.title}</h3>
+                  <h3 className="mt-1 font-serif text-xl transition-colors duration-200 group-hover:text-wine">{area.title}</h3>
                   <p className="mt-1 text-sm text-muted">{area.desc}</p>
                 </article>
               ))}
             </div>
           </div>
-        </section>
+        </motion.section>
 
-        <section id="cases" className="mx-auto max-w-7xl px-4 py-12 md:py-16">
+        <motion.section id="cases" className="mx-auto max-w-7xl px-4 py-12 md:py-16" {...fade(0, reduceMotion ?? false)}>
           <p className="eyebrow">Court record</p>
           <h2 className="mt-2 font-serif text-[clamp(1.8rem,3.5vw,3rem)]">Selected acquittals</h2>
           <div className="mt-4 border-l-4 border-wine bg-wine/5 p-4 text-sm">
@@ -340,8 +370,17 @@ export default function App() {
           </div>
 
           <div className="mt-5 space-y-2.5">
+            <AnimatePresence initial={false}>
             {cases.map((item) => (
-              <article key={item.id} className="card flex flex-wrap items-start justify-between gap-3 p-4">
+              <motion.article
+                key={item.id}
+                layout={reduceMotion ? false : "position"}
+                initial={reduceMotion ? false : { opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={reduceMotion ? undefined : { opacity: 0, y: 4 }}
+                transition={{ duration: reduceMotion ? 0 : 0.18, ease: [0.22, 1, 0.36, 1] as const }}
+                className="card group flex flex-wrap items-start justify-between gap-3 p-4"
+              >
                 <div>
                   <div className="flex flex-wrap gap-2">
                     <span className="rounded-sm bg-blush px-2 py-0.5 text-[11px] font-bold tracking-wider text-ink uppercase">
@@ -356,16 +395,17 @@ export default function App() {
                     Acquittal
                   </span>
                   <button className="text-sm font-semibold text-wine hover:underline" onClick={() => setSelectedCase(item)}>
-                    Record →
+                    Record <span className="inline-block transition-transform duration-200 motion-safe:group-hover:translate-x-1">→</span>
                   </button>
                 </div>
-              </article>
+              </motion.article>
             ))}
+            </AnimatePresence>
             {cases.length === 0 && <p className="card p-8 text-center text-muted">No matching record.</p>}
           </div>
-        </section>
+        </motion.section>
 
-        <section id="media" className="border-y border-line bg-ink py-8 text-cream md:py-10" style={{ backgroundImage: "linear-gradient(135deg, #172554 0%, #4B164C 100%)" }}>
+        <motion.section id="media" className="border-y border-line bg-ink py-8 text-cream md:py-10" style={{ backgroundImage: "linear-gradient(135deg, #172554 0%, #4B164C 100%)" }} {...fade(0, reduceMotion ?? false)}>
           <div className="mx-auto max-w-7xl px-4">
             <p className="eyebrow">In public</p>
             <h2 className="mt-2 font-serif text-[clamp(1.6rem,3vw,2.5rem)]">Podcasts, press &amp; lectures</h2>
@@ -390,10 +430,10 @@ export default function App() {
                     <img
                       src={`https://i.ytimg.com/vi/${featured.id}/hqdefault.jpg`}
                       alt=""
-                      className="aspect-video w-full object-cover opacity-90 transition duration-500 group-hover:scale-[1.02] group-hover:opacity-100"
+                      className="aspect-video w-full object-cover opacity-90 transition duration-500 motion-safe:group-hover:scale-[1.015] group-hover:opacity-100"
                     />
-                    <span className="absolute inset-0 flex items-center justify-center bg-ink/25">
-                      <span className="flex h-14 w-14 items-center justify-center rounded-full bg-wine text-white shadow-xl">
+                    <span className="absolute inset-0 flex items-center justify-center bg-ink/25 transition-colors duration-200 group-hover:bg-ink/15">
+                      <span className="flex h-14 w-14 items-center justify-center rounded-full bg-wine text-white shadow-xl transition-transform duration-200 group-hover:scale-[1.08]">
                         <Play size={24} fill="currentColor" />
                       </span>
                     </span>
@@ -442,9 +482,9 @@ export default function App() {
               </div>
             </div>
           </div>
-        </section>
+        </motion.section>
 
-        <section className="mx-auto max-w-7xl px-4 py-12 md:py-16">
+        <motion.section className="mx-auto max-w-7xl px-4 py-12 md:py-16" {...fade(0, reduceMotion ?? false)}>
           <p className="eyebrow">Before you write</p>
           <h2 className="mt-2 font-serif text-[clamp(1.8rem,3.5vw,2.8rem)]">Frequently asked</h2>
           <div className="mt-8 divide-y divide-line border border-line bg-paper">
@@ -455,15 +495,28 @@ export default function App() {
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
                 >
                   <span className={`font-serif text-lg ${openFaq === i ? "text-roseHover" : "text-ink"}`}>{item.q}</span>
-                  <ChevronDown size={18} className={`shrink-0 transition ${openFaq === i ? "rotate-180" : ""}`} />
+                  <ChevronDown size={18} className={`shrink-0 transition-transform duration-300 ${openFaq === i ? "rotate-180" : ""}`} />
                 </button>
-                {openFaq === i && <p className="px-5 pb-4 text-sm text-muted">{item.a}</p>}
+                <AnimatePresence initial={false}>
+                  {openFaq === i && (
+                    <motion.p
+                      key="answer"
+                      initial={reduceMotion ? false : { height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={reduceMotion ? undefined : { height: 0, opacity: 0 }}
+                      transition={{ duration: reduceMotion ? 0 : 0.28, ease: [0.22, 1, 0.36, 1] as const }}
+                      className="overflow-hidden px-5 pb-4 text-sm text-muted"
+                    >
+                      {item.a}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
               </div>
             ))}
           </div>
-        </section>
+        </motion.section>
 
-        <section id="contact" className="border-t border-line bg-cream py-12 md:py-16">
+        <motion.section id="contact" className="border-t border-line bg-cream py-12 md:py-16" {...fade(0, reduceMotion ?? false)}>
           <div className="mx-auto max-w-7xl px-4">
             <p className="eyebrow">Chamber</p>
             <h2 className="mt-2 font-serif text-[clamp(1.8rem,3.5vw,3rem)]">Discuss the matter</h2>
@@ -571,7 +624,7 @@ export default function App() {
               </div>
             </div>
           </div>
-        </section>
+        </motion.section>
 
         <section id="disclaimer" className="mx-auto max-w-7xl px-4 py-10 pb-24 md:pb-10">
           <div className="border border-line bg-blush p-5 text-sm leading-relaxed text-muted">

@@ -80,6 +80,23 @@
     @apply relative text-[13px] tracking-[0.14em] uppercase text-cream/80 hover:text-gold transition-colors;
   }
 
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: -6px;
+    left: 0;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 220ms ease;
+  }
+
+  .nav-link:hover::after, .nav-link:focus-visible::after {
+    transform: scaleX(1);
+  }
+
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2 rounded-sm bg-wine px-5 py-3 text-[13px] font-semibold tracking-[0.12em] uppercase text-white shadow-sm transition hover:bg-wineHover;
     min-height: 48px;
@@ -110,6 +127,10 @@
       0 24px 60px -20px rgba(23, 37, 84, 0.38);
   }
 
+  .portrait-frame img {
+    transition: transform 420ms ease;
+  }
+
   .input {
     @apply w-full rounded-sm border border-[#d8d0d8] bg-white px-3 py-2.5 text-base text-charcoal outline-none transition placeholder:text-[#756f79] focus:border-rose focus:ring-2 focus:ring-[#b76e79]/[0.14];
   }
@@ -117,8 +138,13 @@
 
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .card:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    border-color: var(--color-wine);
     box-shadow: 0 14px 32px -24px rgba(74, 23, 72, 0.32);
+  }
+
+  .portrait-frame:hover img {
+    transform: scale(1.015);
   }
 
   .btn-primary:hover, .btn-ghost:hover, .btn-gold:hover {
