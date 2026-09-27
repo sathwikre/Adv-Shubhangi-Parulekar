@@ -1,21 +1,23 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ink: #241126;
-  --color-navy: #3a1938;
-  --color-navySoft: #4a1748;
-  --color-wine: #641c5a;
-  --color-wineHover: #7a286d;
-  --color-gold: #b84f78;
-  --color-goldSoft: #d58aa4;
-  --color-cream: #faf7f8;
-  --color-blush: #f3dde5;
-  --color-background-soft: #f4e8ee;
-  --color-pinkSoft: #d58aa4;
-  --color-paper: #fffdfe;
-  --color-line: #e8d5de;
-  --color-muted: #665b65;
-  --color-charcoal: #241c24;
+  --color-ink: #172554;
+  --color-navy: #23345d;
+  --color-navySoft: #4b164c;
+  --color-wine: #4b164c;
+  --color-wineHover: #39113a;
+  --color-gold: #b08d57;
+  --color-goldSoft: #b76e79;
+  --color-rose: #b76e79;
+  --color-roseHover: #9d5964;
+  --color-cream: #faf8f6;
+  --color-blush: #f4eff5;
+  --color-background-soft: #f4eff5;
+  --color-pinkSoft: #b76e79;
+  --color-paper: #ffffff;
+  --color-line: #d8d0d8;
+  --color-muted: #625d66;
+  --color-charcoal: #25232a;
 
   --font-serif: "Playfair Display", "Cormorant Garamond", Georgia, serif;
   --font-display: "Cinzel", "Playfair Display", serif;
@@ -37,7 +39,11 @@
   }
 
   h1, h2, h3, h4 {
-    @apply font-serif tracking-tight;
+    @apply font-serif tracking-tight text-ink;
+  }
+
+  #media h2, #media h3 {
+    color: var(--color-cream);
   }
 
   img, video, iframe {
@@ -48,10 +54,10 @@
     width: 10px;
   }
   ::-webkit-scrollbar-track {
-    background: #f4e8ee;
+    background: #f4eff5;
   }
   ::-webkit-scrollbar-thumb {
-    background: #b84f78;
+    background: #b08d57;
     border-radius: 99px;
   }
 }
@@ -59,11 +65,15 @@
 @layer components {
   .gold-rule {
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(213, 138, 164, 0.85), transparent);
+    background: linear-gradient(90deg, transparent, rgba(176, 141, 87, 0.8), transparent);
   }
 
   .eyebrow {
-    @apply font-display text-[11px] tracking-[0.28em] uppercase text-gold font-semibold;
+    @apply font-display text-[11px] tracking-[0.28em] uppercase text-[#806336] font-semibold;
+  }
+
+  #hero .eyebrow, #media .eyebrow {
+    color: #b08d57;
   }
 
   .nav-link {
@@ -81,7 +91,7 @@
   }
 
   .btn-gold {
-    @apply inline-flex items-center justify-center gap-2 rounded-sm bg-gold px-5 py-3 text-[13px] font-semibold tracking-[0.12em] uppercase text-white transition hover:bg-goldSoft;
+    @apply inline-flex items-center justify-center gap-2 rounded-sm bg-rose px-5 py-3 text-[13px] font-semibold tracking-[0.12em] uppercase text-white transition hover:bg-roseHover;
     min-height: 48px;
   }
 
@@ -96,12 +106,12 @@
 
   .portrait-frame {
     box-shadow:
-      0 0 0 1px rgba(213, 138, 164, 0.55),
-      0 24px 60px -20px rgba(36, 17, 38, 0.5);
+      0 0 0 1px rgba(176, 141, 87, 0.5),
+      0 24px 60px -20px rgba(23, 37, 84, 0.38);
   }
 
   .input {
-    @apply w-full rounded-sm border border-[#dccbd3] bg-white px-3 py-2.5 text-base text-charcoal outline-none transition placeholder:text-[#8c7c87] focus:border-gold focus:ring-2 focus:ring-[#b84f78]/[0.12];
+    @apply w-full rounded-sm border border-[#d8d0d8] bg-white px-3 py-2.5 text-base text-charcoal outline-none transition placeholder:text-[#756f79] focus:border-rose focus:ring-2 focus:ring-[#b76e79]/[0.14];
   }
 }
 

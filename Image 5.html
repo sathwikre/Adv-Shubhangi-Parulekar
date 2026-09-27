@@ -16,16 +16,19 @@
       theme: {
         extend: {
           colors: {
-            brandIvory: '#FAF7F8',
-            brandCharcoal: '#241C24',
-            brandDeep: '#32132F',
-            brandWine: '#641C5A',
-            brandWineHover: '#7A286D',
-            brandGold: '#B84F78',
-            brandGoldLight: '#D58AA4',
-            brandBorder: '#E8D5DE',
-            brandCard: '#FFFDFE',
-            brandMuted: '#665B65'
+            brandIvory: '#FAF8F6',
+            brandCharcoal: '#25232A',
+            brandDeep: '#172554',
+            brandWine: '#4B164C',
+            brandWineHover: '#39113A',
+            brandGold: '#806336',
+            brandGoldLight: '#B08D57',
+            brandRose: '#B76E79',
+            brandRoseHover: '#9D5964',
+            brandBorder: '#D8D0D8',
+            brandCard: '#FFFFFF',
+            brandMuted: '#625D66',
+            brandLavender: '#F4EFF5'
           },
           fontFamily: {
             serif: ['"Playfair Display"', 'Georgia', 'serif'],
@@ -38,8 +41,8 @@
   </script>
 <style data-purpose="custom-typography">
     body {
-      background-color: #FAF7F8;
-      color: #241C24;
+      background-color: #FAF8F6;
+      color: #25232A;
       font-family: 'Inter', sans-serif;
       font-size: 17px;
       line-height: 1.68;
@@ -50,20 +53,23 @@
       font-family: 'Playfair Display', Georgia, serif;
       letter-spacing: -0.01em;
     }
+    main h1, main h2, main h3, main h4 {
+      color: #172554;
+    }
   </style>
 <style data-purpose="custom-components">
     /* Subtle focus states for accessibility */
     a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
-      outline: 2px solid #B84F78;
+      outline: 2px solid #B76E79;
       outline-offset: 3px;
     }
     .gold-rule {
       height: 1px;
-      background: linear-gradient(90deg, rgba(213, 138, 164, 0) 0%, rgba(213, 138, 164, 0.75) 50%, rgba(213, 138, 164, 0) 100%);
+      background: linear-gradient(90deg, rgba(176, 141, 87, 0) 0%, rgba(176, 141, 87, 0.75) 50%, rgba(176, 141, 87, 0) 100%);
     }
     .portrait-frame {
-      box-shadow: 0 10px 30px -8px rgba(36, 17, 38, 0.15);
-      border: 1px solid #D58AA4;
+      box-shadow: 0 10px 30px -8px rgba(23, 37, 84, 0.15);
+      border: 1px solid #B08D57;
     }
   </style>
 </head>
@@ -73,7 +79,7 @@
 <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
 <!-- Advocate Namebrand -->
 <a aria-label="Go to top" class="group block focus:outline-none" href="#hero">
-<span class="block font-cinzel text-xs tracking-wider uppercase font-semibold text-brandGoldLight group-hover:text-white transition-colors">
+<span class="block font-cinzel text-xs tracking-wider uppercase font-semibold text-brandIvory group-hover:text-brandGoldLight transition-colors">
           Adv. Shubhangi Prasad Parulekar
         </span>
 <span class="block text-[11px] tracking-wide text-brandIvory/75 uppercase font-medium mt-0.5">
@@ -82,7 +88,7 @@
 </a>
 <!-- Quick Action Right (Phone & Mobile Menu Toggle) -->
 <div class="flex items-center gap-2">
-<a aria-label="Call Advocate office" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-brandWine text-white text-xs font-semibold tracking-wide hover:bg-brandWineHover transition-colors" href="tel:8308825029">
+<a aria-label="Call Advocate office" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-brandRose text-white text-xs font-semibold tracking-wide hover:bg-brandRoseHover transition-colors" href="tel:8308825029">
 <svg aria-hidden="true" class="w-3.5 h-3.5 fill-current" viewbox="0 0 20 20">
 <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
 </svg>
@@ -107,10 +113,10 @@
 <li><a class="nav-link block py-1.5 text-brandIvory hover:text-brandGoldLight border-b border-white/10" href="#case-outcomes">Selected Acquittals</a></li>
 <li><a class="nav-link block py-1.5 text-brandIvory hover:text-brandGoldLight border-b border-white/10" href="#public-lectures">Media &amp; Public Lectures</a></li>
 <li><a class="nav-link block py-1.5 text-brandIvory hover:text-brandGoldLight border-b border-white/10" href="#contact">Chamber Contact</a></li>
-<li><a class="nav-link block py-1.5 text-xs text-brandMuted uppercase tracking-wider" href="#disclaimer">Statutory Disclaimer</a></li>
+<li><a class="nav-link block py-1.5 text-xs text-brandIvory/70 uppercase tracking-wider" href="#disclaimer">Statutory Disclaimer</a></li>
 </ul>
 <div class="pt-4 mt-2 border-t border-brandBorder flex flex-col gap-2">
-<a class="w-full py-2.5 text-center bg-brandWine text-white font-semibold rounded text-sm tracking-wide" href="tel:8308825029">
+<a class="w-full py-2.5 text-center bg-brandRose text-white font-semibold rounded text-sm tracking-wide hover:bg-brandRoseHover" href="tel:8308825029">
           Direct Line: 8308825029
         </a>
 </div>
@@ -154,7 +160,7 @@
             </p>
 <!-- Action Buttons Group -->
 <div class="flex flex-wrap items-center justify-center sm:justify-start gap-3">
-<a class="inline-flex items-center justify-center px-4 py-2.5 bg-brandWine hover:bg-brandWineHover text-white text-sm font-semibold rounded shadow-sm transition-colors" href="#contact">
+<a class="inline-flex items-center justify-center px-4 py-2.5 bg-brandRose hover:bg-brandRoseHover text-white text-sm font-semibold rounded shadow-sm transition-colors" href="#contact">
                 Schedule Consultation
               </a>
 <a class="inline-flex items-center justify-center px-4 py-2.5 bg-white border border-brandBorder text-brandCharcoal hover:bg-brandIvory text-sm font-semibold rounded transition-colors" href="tel:8308825029">
@@ -607,11 +613,11 @@
 </section>
 <!-- END: SelectedCasesSection -->
 <!-- BEGIN: MediaAndTalksSection -->
-<section class="py-10 px-4 max-w-4xl mx-auto border-t border-brandBorder" id="public-lectures">
+<section class="py-10 px-4 max-w-4xl mx-auto border-t border-brandBorder text-white" id="public-lectures" style="background: linear-gradient(135deg, #172554 0%, #4B164C 100%)">
 <div class="mb-5">
 <span class="text-xs uppercase tracking-widest font-semibold text-brandGold block mb-1">Public Legal Awareness</span>
-<h2 class="text-2xl sm:text-3xl font-serif font-bold text-brandCharcoal">Legal Awareness &amp; Public Lectures</h2>
-<p class="text-sm text-brandMuted mt-1">Disseminating legal education on rights of senior citizens and criminal justice procedure.</p>
+<h2 class="text-2xl sm:text-3xl font-serif font-bold text-white">Legal Awareness &amp; Public Lectures</h2>
+<p class="text-sm text-white/75 mt-1">Disseminating legal education on rights of senior citizens and criminal justice procedure.</p>
 </div>
 <!-- Feature Card -->
 <div class="bg-white border border-brandBorder p-5 rounded-lg shadow-sm">
@@ -644,7 +650,7 @@
 <p class="text-sm text-brandMuted mt-1">For professional legal representation or consultation in criminal trials and appeals.</p>
 </div>
 <!-- Confidentiality Warning Banner -->
-<div class="mb-6 p-3 bg-amber-50 border border-amber-200 text-amber-900 rounded-md text-xs leading-relaxed">
+<div class="mb-6 p-3 bg-brandLavender border border-brandBorder text-brandWine rounded-md text-xs leading-relaxed">
 <strong>Important Confidentiality Notice:</strong> Please do not submit confidential trial records or sensitive case evidence through web forms. Chamber consultations can be arranged in person or by direct telephone.
       </div>
 <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
@@ -764,7 +770,7 @@
 </section>
 <!-- END: ContactAndConsultationSection -->
 <!-- BEGIN: StatutoryDisclaimerSection -->
-<section class="py-8 px-4 max-w-4xl mx-auto border-t border-brandBorder bg-brandIvory" id="disclaimer">
+<section class="py-8 px-4 max-w-4xl mx-auto border-t border-brandBorder bg-brandLavender" id="disclaimer">
 <div class="p-4 bg-white/70 border border-brandBorder rounded-md text-xs text-brandMuted leading-relaxed">
 <h4 class="font-cinzel text-xs uppercase tracking-wider font-bold text-brandWine mb-1.5">
           Bar Council of India Professional Regulation &amp; Statutory Disclaimer

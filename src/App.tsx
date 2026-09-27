@@ -157,8 +157,8 @@ export default function App() {
       </header>
 
       <main>
-        <section id="hero" className="relative overflow-hidden bg-ink pt-20 text-cream" style={{ backgroundImage: "linear-gradient(135deg, #241126 0%, #3a1638 45%, #5a1e55 100%)" }}>
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(213,138,164,0.16),transparent_42%),radial-gradient(circle_at_10%_80%,rgba(100,28,90,0.22),transparent_40%)]" />
+        <section id="hero" className="relative overflow-hidden bg-ink pt-20 text-cream" style={{ backgroundImage: "linear-gradient(135deg, #172554 0%, #4B164C 100%)" }}>
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(183,110,121,0.1),transparent_42%),radial-gradient(circle_at_10%_80%,rgba(23,37,84,0.16),transparent_40%)]" />
           <div className="relative mx-auto grid max-w-7xl items-center gap-8 px-4 pb-12 pt-6 lg:grid-cols-[1.15fr_0.85fr] lg:pb-14">
             <motion.div {...fade(0, reduceMotion ?? false)}>
               <p className="eyebrow">Criminal defence · Maharashtra · Since {PROFILE.since}</p>
@@ -187,7 +187,7 @@ export default function App() {
                   ["Special Acts", "POCSO · MCOCA · NDPS"],
                   ["Legal aid", "Prison & High Court panels"],
                 ].map(([k, v]) => (
-                  <div key={k} className="border border-white/10 bg-white/5 p-3">
+                  <div key={k} className="border border-white/15 bg-white/[0.06] p-3">
                     <div className="font-serif text-xl text-gold">{k}</div>
                     <div className="mt-1 text-[11px] uppercase tracking-wider text-cream/55">{v}</div>
                   </div>
@@ -226,7 +226,7 @@ export default function App() {
           </div>
         </section>
 
-        <section className="border-y border-line bg-paper">
+        <section className="border-y border-line bg-cream">
           <div className="mx-auto grid max-w-7xl gap-6 px-4 py-8 md:grid-cols-3">
             {[
               { icon: Landmark, t: "Trial courts", d: "Pune, Khed & Baramati Sessions" },
@@ -236,7 +236,7 @@ export default function App() {
               <div key={item.t} className="flex items-start gap-3">
                 <item.icon className="mt-0.5 text-wine" size={22} />
                 <div>
-                  <p className="font-serif text-xl">{item.t}</p>
+                  <p className="font-serif text-xl text-ink">{item.t}</p>
                   <p className="text-sm text-muted">{item.d}</p>
                 </div>
               </div>
@@ -344,7 +344,7 @@ export default function App() {
               <article key={item.id} className="card flex flex-wrap items-start justify-between gap-3 p-4">
                 <div>
                   <div className="flex flex-wrap gap-2">
-                    <span className="rounded-sm bg-[#e8f4ee] px-2 py-0.5 text-[11px] font-bold tracking-wider text-[#286247] uppercase">
+                    <span className="rounded-sm bg-blush px-2 py-0.5 text-[11px] font-bold tracking-wider text-ink uppercase">
                       Case {item.id}
                     </span>
                     <span className="rounded-sm bg-wine/10 px-2 py-0.5 text-[11px] font-semibold text-wine">{item.act}</span>
@@ -365,7 +365,7 @@ export default function App() {
           </div>
         </section>
 
-        <section id="media" className="border-y border-line bg-ink py-8 text-cream md:py-10" style={{ backgroundImage: "radial-gradient(circle at 20% 20%, rgba(184,79,120,0.18), transparent 45%)" }}>
+        <section id="media" className="border-y border-line bg-ink py-8 text-cream md:py-10" style={{ backgroundImage: "linear-gradient(135deg, #172554 0%, #4B164C 100%)" }}>
           <div className="mx-auto max-w-7xl px-4">
             <p className="eyebrow">In public</p>
             <h2 className="mt-2 font-serif text-[clamp(1.6rem,3vw,2.5rem)]">Podcasts, press &amp; lectures</h2>
@@ -454,7 +454,7 @@ export default function App() {
                   className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
                 >
-                  <span className="font-serif text-lg">{item.q}</span>
+                  <span className={`font-serif text-lg ${openFaq === i ? "text-roseHover" : "text-ink"}`}>{item.q}</span>
                   <ChevronDown size={18} className={`shrink-0 transition ${openFaq === i ? "rotate-180" : ""}`} />
                 </button>
                 {openFaq === i && <p className="px-5 pb-4 text-sm text-muted">{item.a}</p>}
@@ -463,11 +463,11 @@ export default function App() {
           </div>
         </section>
 
-        <section id="contact" className="border-t border-line bg-paper py-12 md:py-16">
+        <section id="contact" className="border-t border-line bg-cream py-12 md:py-16">
           <div className="mx-auto max-w-7xl px-4">
             <p className="eyebrow">Chamber</p>
             <h2 className="mt-2 font-serif text-[clamp(1.8rem,3.5vw,3rem)]">Discuss the matter</h2>
-            <p className="mt-3 max-w-2xl rounded-sm border border-[#e8d5de] bg-[#f4e8ee] p-3 text-sm text-[#4a1748]">
+            <p className="mt-3 max-w-2xl rounded-sm border border-line bg-blush p-3 text-sm text-ink">
               Do not send FIRs, medical records or other confidential papers through this form. Call or visit chamber for those.
             </p>
 
@@ -574,8 +574,8 @@ export default function App() {
         </section>
 
         <section id="disclaimer" className="mx-auto max-w-7xl px-4 py-10 pb-24 md:pb-10">
-          <div className="border border-[#dfc9d3] bg-[#f3e9ee] p-5 text-sm leading-relaxed text-muted">
-            <h4 className="mb-2 font-display text-[11px] tracking-[0.2em] text-[#6e3655] uppercase">Statutory disclaimer</h4>
+          <div className="border border-line bg-blush p-5 text-sm leading-relaxed text-muted">
+            <h4 className="mb-2 font-display text-[11px] tracking-[0.2em] text-wine uppercase">Statutory disclaimer</h4>
             <p>
               As per the Bar Council of India, advocates are prohibited from soliciting work or advertising. Information here is for the visitor who has chosen to view this profile. It is not legal advice. Transmission or use of this site does not create an advocate–client relationship. Prior acquittals do not predict future results.
             </p>
@@ -587,7 +587,7 @@ export default function App() {
         <a href={PROFILE.phoneHref} className="flex items-center justify-center gap-2 bg-ink py-3.5 font-semibold tracking-wider text-white uppercase">
           <Phone size={16} /> Call
         </a>
-        <a href={PROFILE.whatsapp} className="flex items-center justify-center gap-2 bg-wine py-3.5 font-semibold tracking-wider text-white uppercase">
+        <a href={PROFILE.whatsapp} className="flex items-center justify-center gap-2 border border-line bg-blush py-3.5 font-semibold tracking-wider text-wine uppercase">
           <MessageCircle size={16} /> WhatsApp
         </a>
       </div>
