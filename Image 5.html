@@ -16,15 +16,16 @@
       theme: {
         extend: {
           colors: {
-            brandIvory: '#F7F5F0',
-            brandCharcoal: '#202020',
-            brandWine: '#6E1F2A',
-            brandWineHover: '#571720',
-            brandGold: '#B59A62',
-            brandGoldLight: '#D6C498',
-            brandBorder: '#E8E5DF',
-            brandCard: '#FFFFFF',
-            brandMuted: '#585550'
+            brandIvory: '#FAF7F8',
+            brandCharcoal: '#241C24',
+            brandDeep: '#32132F',
+            brandWine: '#641C5A',
+            brandWineHover: '#7A286D',
+            brandGold: '#B84F78',
+            brandGoldLight: '#D58AA4',
+            brandBorder: '#E8D5DE',
+            brandCard: '#FFFDFE',
+            brandMuted: '#665B65'
           },
           fontFamily: {
             serif: ['"Playfair Display"', 'Georgia', 'serif'],
@@ -37,8 +38,8 @@
   </script>
 <style data-purpose="custom-typography">
     body {
-      background-color: #F7F5F0;
-      color: #202020;
+      background-color: #FAF7F8;
+      color: #241C24;
       font-family: 'Inter', sans-serif;
       font-size: 17px;
       line-height: 1.68;
@@ -53,29 +54,29 @@
 <style data-purpose="custom-components">
     /* Subtle focus states for accessibility */
     a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
-      outline: 2px solid #6E1F2A;
+      outline: 2px solid #B84F78;
       outline-offset: 3px;
     }
     .gold-rule {
       height: 1px;
-      background: linear-gradient(90deg, rgba(181, 154, 98, 0) 0%, rgba(181, 154, 98, 0.75) 50%, rgba(181, 154, 98, 0) 100%);
+      background: linear-gradient(90deg, rgba(213, 138, 164, 0) 0%, rgba(213, 138, 164, 0.75) 50%, rgba(213, 138, 164, 0) 100%);
     }
     .portrait-frame {
-      box-shadow: 0 10px 30px -8px rgba(32, 32, 32, 0.15);
-      border: 1px solid #D6C498;
+      box-shadow: 0 10px 30px -8px rgba(36, 17, 38, 0.15);
+      border: 1px solid #D58AA4;
     }
   </style>
 </head>
 <body class="min-h-screen bg-brandIvory text-brandCharcoal flex flex-col selection:bg-brandWine selection:text-white">
 <!-- BEGIN: TopHeader -->
-<header class="sticky top-0 z-40 bg-brandIvory/95 backdrop-blur-md border-b border-brandBorder transition-shadow duration-200" id="top-navbar">
+<header class="sticky top-0 z-40 bg-brandDeep/95 text-brandIvory backdrop-blur-md border-b border-brandBorder transition-shadow duration-200" id="top-navbar">
 <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
 <!-- Advocate Namebrand -->
 <a aria-label="Go to top" class="group block focus:outline-none" href="#hero">
-<span class="block font-cinzel text-xs tracking-wider uppercase font-semibold text-brandWine group-hover:text-brandWineHover transition-colors">
+<span class="block font-cinzel text-xs tracking-wider uppercase font-semibold text-brandGoldLight group-hover:text-white transition-colors">
           Adv. Shubhangi Prasad Parulekar
         </span>
-<span class="block text-[11px] tracking-wide text-brandMuted uppercase font-medium mt-0.5">
+<span class="block text-[11px] tracking-wide text-brandIvory/75 uppercase font-medium mt-0.5">
           Criminal Defence · Pune &amp; Bombay High Court
         </span>
 </a>
@@ -87,7 +88,7 @@
 </svg>
 <span>Call Chamber</span>
 </a>
-<button aria-controls="mobile-nav" aria-expanded="false" aria-label="Toggle navigation menu" class="p-2 rounded border border-brandBorder text-brandCharcoal hover:bg-white transition-colors" id="menu-toggle-btn" type="button">
+<button aria-controls="mobile-nav" aria-expanded="false" aria-label="Toggle navigation menu" class="p-2 rounded border border-brandBorder text-brandIvory hover:bg-brandWine transition-colors" id="menu-toggle-btn" type="button">
 <svg class="w-5 h-5" fill="none" id="menu-icon-bars" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
@@ -98,14 +99,14 @@
 </div>
 </div>
 <!-- Mobile Drawer Navigation -->
-<nav aria-label="Mobile Navigation" class="hidden border-t border-brandBorder bg-white px-4 py-4 shadow-lg transition-all" id="mobile-nav">
+<nav aria-label="Mobile Navigation" class="hidden border-t border-brandBorder bg-brandDeep px-4 py-4 text-brandIvory shadow-lg transition-all" id="mobile-nav">
 <ul class="flex flex-col space-y-3 font-medium text-base">
-<li><a class="nav-link block py-1.5 text-brandCharcoal hover:text-brandWine border-b border-gray-100" href="#hero">Home</a></li>
-<li><a class="nav-link block py-1.5 text-brandCharcoal hover:text-brandWine border-b border-gray-100" href="#experience">Professional Background</a></li>
-<li><a class="nav-link block py-1.5 text-brandCharcoal hover:text-brandWine border-b border-gray-100" href="#practice-areas">Practice Areas</a></li>
-<li><a class="nav-link block py-1.5 text-brandCharcoal hover:text-brandWine border-b border-gray-100" href="#case-outcomes">Selected Acquittals</a></li>
-<li><a class="nav-link block py-1.5 text-brandCharcoal hover:text-brandWine border-b border-gray-100" href="#public-lectures">Media &amp; Public Lectures</a></li>
-<li><a class="nav-link block py-1.5 text-brandCharcoal hover:text-brandWine border-b border-gray-100" href="#contact">Chamber Contact</a></li>
+<li><a class="nav-link block py-1.5 text-brandIvory hover:text-brandGoldLight border-b border-white/10" href="#hero">Home</a></li>
+<li><a class="nav-link block py-1.5 text-brandIvory hover:text-brandGoldLight border-b border-white/10" href="#experience">Professional Background</a></li>
+<li><a class="nav-link block py-1.5 text-brandIvory hover:text-brandGoldLight border-b border-white/10" href="#practice-areas">Practice Areas</a></li>
+<li><a class="nav-link block py-1.5 text-brandIvory hover:text-brandGoldLight border-b border-white/10" href="#case-outcomes">Selected Acquittals</a></li>
+<li><a class="nav-link block py-1.5 text-brandIvory hover:text-brandGoldLight border-b border-white/10" href="#public-lectures">Media &amp; Public Lectures</a></li>
+<li><a class="nav-link block py-1.5 text-brandIvory hover:text-brandGoldLight border-b border-white/10" href="#contact">Chamber Contact</a></li>
 <li><a class="nav-link block py-1.5 text-xs text-brandMuted uppercase tracking-wider" href="#disclaimer">Statutory Disclaimer</a></li>
 </ul>
 <div class="pt-4 mt-2 border-t border-brandBorder flex flex-col gap-2">
@@ -137,7 +138,7 @@
 <!-- Advocate Portrait -->
 <div class="flex-shrink-0 text-center">
 <div class="relative inline-block portrait-frame p-1 rounded bg-white">
-<img alt="Advocate Shubhangi Prasad Parulekar portrait" class="w-40 h-40 sm:w-44 sm:h-44 object-cover rounded" height="176" loading="eager" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQlLf25twmZpYHdpIjYs20NIl_GUDp4wfRbAdicVC3ngPES-xPOJ98NmGtRbJGWjU7Ror_5dAkfOKRelBPMem1JNrmcg1IRfwtjjk3kAFVcJT1Ie7IbT0I4a4LOEzNB6V9NK96_TrTSUJiPrsi6hD_WgAH0I7J1ay52Qgbdul5XOskvg-eWUMXPT0HALVn5S8-rVC1TyAOb4J6x-hscgCSlO5RjtRYHjGqVS2AeZdXeLGFSDoIU2tSgihGypcPqRBGBg" width="176"/>
+<img alt="Advocate Shubhangi Prasad Parulekar portrait" class="w-40 h-40 sm:w-44 sm:h-44 object-cover rounded" height="176" loading="eager" src="/image.png" width="176"/>
 <div class="mt-2 text-[11px] uppercase tracking-wider font-semibold text-brandWine bg-brandIvory py-0.5 px-2 border border-brandBorder rounded">
                 Practising Since 2008
               </div>
@@ -779,7 +780,7 @@
 <!-- END: StatutoryDisclaimerSection -->
 </main>
 <!-- BEGIN: MainFooter -->
-<footer class="bg-brandCharcoal text-white pt-8 pb-12 border-t border-brandWine">
+<footer class="bg-brandDeep text-white pt-8 pb-12 border-t border-brandWine">
 <div class="max-w-4xl mx-auto px-4">
 <div class="flex flex-col sm:flex-row items-start justify-between gap-6 pb-6 border-b border-white/10 text-xs">
 <div>

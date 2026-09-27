@@ -156,19 +156,19 @@ export default function App() {
       </header>
 
       <main>
-        <section id="hero" className="relative overflow-hidden bg-ink pt-24 text-cream">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(198,164,106,0.18),transparent_42%),radial-gradient(circle_at_10%_80%,rgba(123,36,51,0.25),transparent_40%)]" />
-          <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 pb-16 pt-8 lg:grid-cols-[1.15fr_0.85fr] lg:pb-20">
+        <section id="hero" className="relative overflow-hidden bg-ink pt-20 text-cream" style={{ backgroundImage: "linear-gradient(135deg, #241126 0%, #3a1638 45%, #5a1e55 100%)" }}>
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(213,138,164,0.16),transparent_42%),radial-gradient(circle_at_10%_80%,rgba(100,28,90,0.22),transparent_40%)]" />
+          <div className="relative mx-auto grid max-w-7xl items-center gap-8 px-4 pb-12 pt-6 lg:grid-cols-[1.15fr_0.85fr] lg:pb-14">
             <motion.div {...fade()}>
               <p className="eyebrow">Criminal defence · Maharashtra · Since {PROFILE.since}</p>
-              <h1 className="mt-4 font-serif text-[clamp(2.4rem,6vw,4.6rem)] leading-[1.08] text-cream">
+              <h1 className="mt-3 font-serif text-[clamp(2.2rem,5vw,3.8rem)] leading-[1.08] text-cream">
                 Clarity in the courtroom.
                 <span className="block italic text-goldSoft">Defence that is prepared.</span>
               </h1>
-              <p className="mt-5 max-w-xl text-base leading-relaxed text-cream/75 md:text-lg">
+              <p className="mt-4 max-w-xl text-base leading-relaxed text-cream/75 md:text-base">
                 Adv. Shubhangi Prasad Parulekar leads criminal trial and appellate work at {PROFILE.firm} — appearing before District &amp; Sessions Courts at Pune, Khed and Baramati, and on the Appellate Side of the Bombay High Court.
               </p>
-              <div className="mt-8 flex flex-wrap gap-3">
+              <div className="mt-6 flex flex-wrap gap-3">
                 <a href="#contact" className="btn-gold">
                   Request consultation
                 </a>
@@ -179,7 +179,7 @@ export default function App() {
                   <Play size={16} /> Watch the POCSO podcast
                 </a>
               </div>
-              <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              <div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-4">
                 {[
                   [`${YEARS}+`, "Years in practice"],
                   ["BHC", "Appellate Side"],
@@ -194,16 +194,16 @@ export default function App() {
               </div>
             </motion.div>
 
-            <motion.div className="relative mx-auto w-full max-w-md" {...fade(0.12)}>
+            <motion.div className="relative mx-auto w-full max-w-sm" {...fade(0.12)}>
               <div className="portrait-frame relative overflow-hidden rounded-sm bg-navy">
                 <img
-                  src="/portrait.png"
+                  src="/image.png"
                   alt="Advocate Shubhangi Prasad Parulekar"
                   className="aspect-[3/4] w-full object-cover object-top"
                 />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink via-ink/50 to-transparent p-5">
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink via-ink/50 to-transparent p-4">
                   <p className="font-display text-[10px] tracking-[0.28em] text-gold uppercase">Defence counsel</p>
-                  <p className="font-serif text-2xl">Shubhangi Prasad Parulekar</p>
+                  <p className="font-serif text-xl">Shubhangi Prasad Parulekar</p>
                   <p className="text-sm text-cream/70">Pune · Bombay High Court</p>
                 </div>
               </div>
@@ -243,10 +243,10 @@ export default function App() {
           </div>
         </section>
 
-        <section id="about" className="mx-auto max-w-7xl px-4 py-16 md:py-20">
+        <section id="about" className="mx-auto max-w-7xl px-4 py-12 md:py-16">
           <motion.div {...fade()}>
             <p className="eyebrow">The chamber</p>
-            <h2 className="mt-2 max-w-3xl font-serif text-[clamp(2rem,4vw,3.4rem)] leading-tight">
+            <h2 className="mt-2 max-w-3xl font-serif text-[clamp(1.8rem,3.5vw,3rem)] leading-tight">
               Built in criminal courts — not on slogans.
             </h2>
             <p className="mt-4 max-w-3xl text-muted">
@@ -286,10 +286,10 @@ export default function App() {
           </div>
         </section>
 
-        <section id="practice" className="border-y border-line bg-paper py-16 md:py-20">
+        <section id="practice" className="border-y border-line bg-paper py-12 md:py-16">
           <div className="mx-auto max-w-7xl px-4">
             <p className="eyebrow">Focus</p>
-            <h2 className="mt-2 font-serif text-[clamp(2rem,4vw,3.4rem)]">Practice areas</h2>
+            <h2 className="mt-2 font-serif text-[clamp(1.8rem,3.5vw,3rem)]">Practice areas</h2>
             <p className="mt-2 max-w-2xl text-muted">Each brief is assessed on the record, the statute, and what the court can actually be asked to do.</p>
             <div className="mt-8 grid gap-3 sm:grid-cols-2">
               {PRACTICE_AREAS.map((area) => (
@@ -303,9 +303,9 @@ export default function App() {
           </div>
         </section>
 
-        <section id="cases" className="mx-auto max-w-7xl px-4 py-16 md:py-20">
+        <section id="cases" className="mx-auto max-w-7xl px-4 py-12 md:py-16">
           <p className="eyebrow">Court record</p>
-          <h2 className="mt-2 font-serif text-[clamp(2rem,4vw,3.4rem)]">Selected acquittals</h2>
+          <h2 className="mt-2 font-serif text-[clamp(1.8rem,3.5vw,3rem)]">Selected acquittals</h2>
           <div className="mt-4 border-l-4 border-wine bg-wine/5 p-4 text-sm">
             <strong className="text-wine">Disclaimer.</strong> Past outcomes depend on the facts, evidence and law of each matter. They do not guarantee a similar result later.
           </div>
@@ -343,7 +343,7 @@ export default function App() {
               <article key={item.id} className="card flex flex-wrap items-start justify-between gap-3 p-4">
                 <div>
                   <div className="flex flex-wrap gap-2">
-                    <span className="rounded-sm bg-cream px-2 py-0.5 text-[11px] font-bold tracking-wider text-gold uppercase">
+                    <span className="rounded-sm bg-[#e8f4ee] px-2 py-0.5 text-[11px] font-bold tracking-wider text-[#286247] uppercase">
                       Case {item.id}
                     </span>
                     <span className="rounded-sm bg-wine/10 px-2 py-0.5 text-[11px] font-semibold text-wine">{item.act}</span>
@@ -364,10 +364,10 @@ export default function App() {
           </div>
         </section>
 
-        <section id="media" className="border-y border-line bg-ink py-16 text-cream md:py-20">
+        <section id="media" className="border-y border-line bg-ink py-12 text-cream md:py-16" style={{ backgroundImage: "radial-gradient(circle at 20% 20%, rgba(184,79,120,0.18), transparent 45%)" }}>
           <div className="mx-auto max-w-7xl px-4">
             <p className="eyebrow">In public</p>
-            <h2 className="mt-2 font-serif text-[clamp(2rem,4vw,3.4rem)]">Podcasts, press &amp; lectures</h2>
+            <h2 className="mt-2 font-serif text-[clamp(1.8rem,3.5vw,3rem)]">Podcasts, press &amp; lectures</h2>
             <p className="mt-2 max-w-2xl text-cream/65">
               Legal literacy in Marathi and English — on trial courts, POCSO, senior-citizen law, and workplace POSH.
             </p>
@@ -443,9 +443,9 @@ export default function App() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-4 py-16 md:py-20">
+        <section className="mx-auto max-w-7xl px-4 py-12 md:py-16">
           <p className="eyebrow">Before you write</p>
-          <h2 className="mt-2 font-serif text-[clamp(2rem,4vw,3.2rem)]">Frequently asked</h2>
+          <h2 className="mt-2 font-serif text-[clamp(1.8rem,3.5vw,2.8rem)]">Frequently asked</h2>
           <div className="mt-8 divide-y divide-line border border-line bg-paper">
             {FAQS.map((item, i) => (
               <div key={item.q}>
@@ -462,11 +462,11 @@ export default function App() {
           </div>
         </section>
 
-        <section id="contact" className="border-t border-line bg-paper py-16 md:py-20">
+        <section id="contact" className="border-t border-line bg-paper py-12 md:py-16">
           <div className="mx-auto max-w-7xl px-4">
             <p className="eyebrow">Chamber</p>
-            <h2 className="mt-2 font-serif text-[clamp(2rem,4vw,3.4rem)]">Discuss the matter</h2>
-            <p className="mt-3 max-w-2xl rounded-sm border border-amber-200 bg-amber-50 p-3 text-sm text-amber-950">
+            <h2 className="mt-2 font-serif text-[clamp(1.8rem,3.5vw,3rem)]">Discuss the matter</h2>
+            <p className="mt-3 max-w-2xl rounded-sm border border-[#e8d5de] bg-[#f4e8ee] p-3 text-sm text-[#4a1748]">
               Do not send FIRs, medical records or other confidential papers through this form. Call or visit chamber for those.
             </p>
 
@@ -573,8 +573,8 @@ export default function App() {
         </section>
 
         <section id="disclaimer" className="mx-auto max-w-7xl px-4 py-10 pb-24 md:pb-10">
-          <div className="border border-line bg-white/70 p-5 text-sm leading-relaxed text-muted">
-            <h4 className="mb-2 font-display text-[11px] tracking-[0.2em] text-wine uppercase">Statutory disclaimer</h4>
+          <div className="border border-[#dfc9d3] bg-[#f3e9ee] p-5 text-sm leading-relaxed text-muted">
+            <h4 className="mb-2 font-display text-[11px] tracking-[0.2em] text-[#6e3655] uppercase">Statutory disclaimer</h4>
             <p>
               As per the Bar Council of India, advocates are prohibited from soliciting work or advertising. Information here is for the visitor who has chosen to view this profile. It is not legal advice. Transmission or use of this site does not create an advocate–client relationship. Prior acquittals do not predict future results.
             </p>

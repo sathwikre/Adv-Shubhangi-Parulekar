@@ -64,6 +64,15 @@ export const MEDIA = [
     href: "https://www.youtube.com/shorts/NdPUAjRas8k",
   },
   {
+    kind: "youtube" as const,
+    featured: false,
+    id: "M8Uwwt0xij0",
+    title: "Kaydyacha Panchnama EP 02: MCOCA bail explained",
+    outlet: "Sakal · Kaydyacha Panchanama",
+    blurb: "Adv. Shubhangi Parulekar discusses whether bail is possible under MCOCA and what the law says.",
+    href: "https://www.youtube.com/watch?v=M8Uwwt0xij0",
+  },
+  {
     kind: "article" as const,
     featured: false,
     id: "sakal-ep05",
