@@ -87,6 +87,11 @@
 
   .card {
     @apply rounded-sm border border-line bg-paper shadow-[0_10px_40px_-24px_rgba(74,23,72,0.18)];
+    transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+  }
+
+  .btn-primary, .btn-ghost, .btn-gold {
+    transition: transform 180ms ease, background-color 180ms ease, border-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
   }
 
   .portrait-frame {
@@ -97,6 +102,26 @@
 
   .input {
     @apply w-full rounded-sm border border-[#dccbd3] bg-white px-3 py-2.5 text-base text-charcoal outline-none transition placeholder:text-[#8c7c87] focus:border-gold focus:ring-2 focus:ring-[#b84f78]/[0.12];
+  }
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 32px -24px rgba(74, 23, 72, 0.32);
+  }
+
+  .btn-primary:hover, .btn-ghost:hover, .btn-gold:hover {
+    transform: translateY(-1px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }
 

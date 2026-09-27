@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import {
   Menu,
   X,
@@ -33,16 +33,17 @@ const NAV = [
 
 const YEARS = new Date().getFullYear() - PROFILE.since;
 
-function fade(delay = 0) {
+function fade(delay = 0, reduceMotion = false) {
   return {
-    initial: { opacity: 0, y: 18 },
+    initial: reduceMotion ? false : { opacity: 0, y: 14 },
     whileInView: { opacity: 1, y: 0 },
     viewport: { once: true, margin: "-80px" },
-    transition: { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] as const },
+    transition: { duration: reduceMotion ? 0 : 0.68, delay: reduceMotion ? 0 : delay, ease: [0.22, 1, 0.36, 1] as const },
   };
 }
 
 export default function App() {
+  const reduceMotion = useReducedMotion();
   const [menuOpen, setMenuOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("all");
@@ -159,7 +160,7 @@ export default function App() {
         <section id="hero" className="relative overflow-hidden bg-ink pt-20 text-cream" style={{ backgroundImage: "linear-gradient(135deg, #241126 0%, #3a1638 45%, #5a1e55 100%)" }}>
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(213,138,164,0.16),transparent_42%),radial-gradient(circle_at_10%_80%,rgba(100,28,90,0.22),transparent_40%)]" />
           <div className="relative mx-auto grid max-w-7xl items-center gap-8 px-4 pb-12 pt-6 lg:grid-cols-[1.15fr_0.85fr] lg:pb-14">
-            <motion.div {...fade()}>
+            <motion.div {...fade(0, reduceMotion ?? false)}>
               <p className="eyebrow">Criminal defence · Maharashtra · Since {PROFILE.since}</p>
               <h1 className="mt-3 font-serif text-[clamp(2.2rem,5vw,3.8rem)] leading-[1.08] text-cream">
                 Clarity in the courtroom.
@@ -194,7 +195,7 @@ export default function App() {
               </div>
             </motion.div>
 
-            <motion.div className="relative mx-auto w-full max-w-sm" {...fade(0.12)}>
+            <motion.div className="relative mx-auto w-full max-w-sm" {...fade(0.12, reduceMotion ?? false)}>
               <div className="portrait-frame relative overflow-hidden rounded-sm bg-navy">
                 <img
                   src="/image.png"
@@ -244,7 +245,7 @@ export default function App() {
         </section>
 
         <section id="about" className="mx-auto max-w-7xl px-4 py-12 md:py-16">
-          <motion.div {...fade()}>
+          <motion.div {...fade(0, reduceMotion ?? false)}>
             <p className="eyebrow">The chamber</p>
             <h2 className="mt-2 max-w-3xl font-serif text-[clamp(1.8rem,3.5vw,3rem)] leading-tight">
               Built in criminal courts — not on slogans.
@@ -277,7 +278,7 @@ export default function App() {
                 body: "Panel Advocate, Pune District Legal Aid Committee; MSLSA panel at the Bombay High Court; Yerawada Central Prison panel; amicus curiae in Sessions trials at Pune.",
               },
             ].map((block, i) => (
-              <motion.article key={block.title} className="card border-l-4 border-l-wine p-5 md:p-6" {...fade(i * 0.05)}>
+              <motion.article key={block.title} className="card border-l-4 border-l-wine p-5 md:p-6" {...fade(i * 0.05, reduceMotion ?? false)}>
                 <p className="text-[11px] font-semibold tracking-[0.2em] text-wine uppercase">{block.kicker}</p>
                 <h3 className="mt-1 font-serif text-2xl">{block.title}</h3>
                 <p className="mt-2 text-muted">{block.body}</p>
@@ -389,7 +390,7 @@ export default function App() {
                     <img
                       src={`https://i.ytimg.com/vi/${featured.id}/hqdefault.jpg`}
                       alt=""
-                      className="aspect-video w-full object-cover opacity-90 transition group-hover:opacity-100"
+                      className="aspect-video w-full object-cover opacity-90 transition duration-500 group-hover:scale-[1.02] group-hover:opacity-100"
                     />
                     <span className="absolute inset-0 flex items-center justify-center bg-ink/25">
                       <span className="flex h-14 w-14 items-center justify-center rounded-full bg-wine text-white shadow-xl">
@@ -415,7 +416,7 @@ export default function App() {
                     href={item.href}
                     target={item.href.startsWith("http") ? "_blank" : undefined}
                     rel="noreferrer"
-                    className="block border border-white/10 bg-white/5 p-3 transition hover:border-gold/50"
+                    className="block border border-white/10 bg-white/5 p-3 transition duration-200 hover:-translate-y-0.5 hover:border-gold/50 hover:bg-white/[0.08]"
                   >
                     <div className="flex items-start gap-3">
                       {item.kind === "youtube" ? <Youtube className="text-gold" size={16} /> : item.kind === "radio" ? <Radio className="text-gold" size={16} /> : <Mic2 className="text-gold" size={16} />}
