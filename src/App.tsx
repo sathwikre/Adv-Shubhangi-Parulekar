@@ -99,7 +99,7 @@ export default function App() {
     <div className="min-h-screen">
       <header
         className={`fixed inset-x-0 top-0 z-40 transition-all ${
-          scrolled ? "bg-ink/95 shadow-lg shadow-ink/20 backdrop-blur-md" : "bg-ink"
+          scrolled ? "bg-ink/95 shadow-lg shadow-ink/20 backdrop-blur-md" : "bg-transparent"
         }`}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3">
@@ -364,15 +364,15 @@ export default function App() {
           </div>
         </section>
 
-        <section id="media" className="border-y border-line bg-ink py-12 text-cream md:py-16" style={{ backgroundImage: "radial-gradient(circle at 20% 20%, rgba(184,79,120,0.18), transparent 45%)" }}>
+        <section id="media" className="border-y border-line bg-ink py-8 text-cream md:py-10" style={{ backgroundImage: "radial-gradient(circle at 20% 20%, rgba(184,79,120,0.18), transparent 45%)" }}>
           <div className="mx-auto max-w-7xl px-4">
             <p className="eyebrow">In public</p>
-            <h2 className="mt-2 font-serif text-[clamp(1.8rem,3.5vw,3rem)]">Podcasts, press &amp; lectures</h2>
-            <p className="mt-2 max-w-2xl text-cream/65">
+            <h2 className="mt-2 font-serif text-[clamp(1.6rem,3vw,2.5rem)]">Podcasts, press &amp; lectures</h2>
+            <p className="mt-2 max-w-2xl text-sm text-cream/65">
               Legal literacy in Marathi and English — on trial courts, POCSO, senior-citizen law, and workplace POSH.
             </p>
 
-            <div className="mt-8 grid gap-6 lg:grid-cols-[1.4fr_0.8fr]">
+            <div className="mt-6 grid gap-4 lg:grid-cols-[1.4fr_0.8fr]">
               <div className="overflow-hidden rounded-sm border border-white/10 bg-navy">
                 {playing ? (
                   <div className="aspect-video">
@@ -392,15 +392,15 @@ export default function App() {
                       className="aspect-video w-full object-cover opacity-90 transition group-hover:opacity-100"
                     />
                     <span className="absolute inset-0 flex items-center justify-center bg-ink/25">
-                      <span className="flex h-16 w-16 items-center justify-center rounded-full bg-wine text-white shadow-xl">
-                        <Play size={28} fill="currentColor" />
+                      <span className="flex h-14 w-14 items-center justify-center rounded-full bg-wine text-white shadow-xl">
+                        <Play size={24} fill="currentColor" />
                       </span>
                     </span>
                   </button>
                 )}
-                <div className="p-5">
+                <div className="p-4">
                   <p className="text-[11px] tracking-[0.2em] text-gold uppercase">{featured.outlet}</p>
-                  <h3 className="mt-1 font-serif text-2xl">{featured.title}</h3>
+                  <h3 className="mt-1 font-serif text-xl">{featured.title}</h3>
                   <p className="mt-2 text-sm text-cream/70">{featured.blurb}</p>
                   <a href={featured.href} target="_blank" rel="noreferrer" className="mt-3 inline-flex items-center gap-1 text-sm text-gold hover:underline">
                     Open on YouTube <ExternalLink size={12} />
@@ -408,21 +408,21 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {MEDIA.filter((m) => !m.featured).map((item) => (
                   <a
                     key={item.id}
                     href={item.href}
                     target={item.href.startsWith("http") ? "_blank" : undefined}
                     rel="noreferrer"
-                    className="block border border-white/10 bg-white/5 p-4 transition hover:border-gold/50"
+                    className="block border border-white/10 bg-white/5 p-3 transition hover:border-gold/50"
                   >
                     <div className="flex items-start gap-3">
-                      {item.kind === "youtube" ? <Youtube className="text-gold" size={18} /> : item.kind === "radio" ? <Radio className="text-gold" size={18} /> : <Mic2 className="text-gold" size={18} />}
+                      {item.kind === "youtube" ? <Youtube className="text-gold" size={16} /> : item.kind === "radio" ? <Radio className="text-gold" size={16} /> : <Mic2 className="text-gold" size={16} />}
                       <div>
-                        <p className="text-[11px] tracking-wider text-gold/80 uppercase">{item.outlet}</p>
-                        <h3 className="font-serif text-lg leading-snug">{item.title}</h3>
-                        <p className="mt-1 text-sm text-cream/60">{item.blurb}</p>
+                        <p className="text-[10px] tracking-wider text-gold/80 uppercase">{item.outlet}</p>
+                        <h3 className="font-serif text-base leading-snug">{item.title}</h3>
+                        <p className="mt-1 text-xs leading-relaxed text-cream/60">{item.blurb}</p>
                       </div>
                     </div>
                   </a>
@@ -431,7 +431,7 @@ export default function App() {
                   href={PROFILE.instagram}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center justify-between border border-gold/30 bg-gold/10 p-4"
+                  className="flex items-center justify-between border border-gold/30 bg-gold/10 p-3"
                 >
                   <span className="inline-flex items-center gap-2 font-medium">
                     <Instagram size={18} /> Instagram @spparulekar
